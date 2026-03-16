@@ -1,1169 +1,1431 @@
+
+
+
+jadikan tombol link dan taruh di html di bawah ini 
+https://koramil05.github.io/previewpura/
+
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard Kas Pura - Koramil Sukasada</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#000000" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Udayana Portal" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="msapplication-TileColor" content="#000000" />
+<meta name="msapplication-tap-highlight" content="no" />
+<title>Udayana Portal</title>
+<!-- PWA Icons from GitHub Root -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<style>
+  /* ===== RESET & BASE STYLES ===== */
+  * { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    height: 100%;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #0a1525 0%, #071121 100%);
+  }
+
+  body {
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    min-height: -webkit-fill-available;
+    position: relative;
+    color: white;
+  }
+
+  /* ===== HEADER ===== */
+  .udayana-header {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    text-align: center;
+    width: 100%;
+    padding: 0 15px;
+  }
+
+  .udayana-logo {
+    width: 100px;
+    height: 100px;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+    transition: all 0.5s ease;
+    animation: gentlePulse 3s infinite alternate;
+  }
+
+  @keyframes gentlePulse {
+    0% { 
+      transform: scale(1);
+      filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+    }
+    100% { 
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.6));
+    }
+  }
+
+  .udayana-title {
+    color: #ffd700;
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 8px;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    letter-spacing: 2px;
+  }
+
+  /* Responsif header */
+  @media (max-width: 768px) {
+    .udayana-logo {
+      width: 80px;
+      height: 80px;
+    }
     
-    <!-- ====== PWA ASSETS ====== -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/Koramil05/PURA05/main/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Koramil05/PURA05/main/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/Koramil05/PURA05/main/favicon-16x16.png">
-    <link rel="manifest" href="https://raw.githubusercontent.com/Koramil05/PURA05/main/site.webmanifest">
-    <meta name="theme-color" content="#1a237e">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Kas Pura">
-    <meta name="application-name" content="Kas Pura">
+    .udayana-title {
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .udayana-logo {
+      width: 70px;
+      height: 70px;
+    }
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* ====== VARIABLES ====== */
-        :root {
-            --blue-dark: #0a192f;
-            --blue-medium: #1a237e;
-            --green-dark: #1b5e20;
-            --green-light: #4caf50;
-            --red: #c62828;
-            --orange: #f57c00;
-            --purple: #7b1fa2;
-            --yellow: #ff9800;
-            --text-light: #ffffff;
-            --text-medium: #e3f2fd;
-            --text-dim: #90a4ae;
-            --bg-card: rgba(25, 35, 45, 0.95);
-            --border-light: rgba(255, 255, 255, 0.25);
-            --shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
+    .udayana-title {
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+  }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* ===== MAIN CONTAINER ===== */
+  .main-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 140px 20px 20px;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: var(--blue-dark);
-            color: var(--text-light);
-            min-height: 100vh;
-            line-height: 1.5;
-        }
+  /* Scrollbar styling */
+  .main-container::-webkit-scrollbar {
+    width: 8px;
+  }
 
-        .header {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            height: 56px;
-            background: var(--blue-medium);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 16px;
-            z-index: 100;
-            border-bottom: 1px solid var(--border-light);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        .header h1 { font-size: 18px; font-weight: 600; }
-        .header-actions { display: flex; gap: 12px; }
-        .header-btn {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: white;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .header-btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.05);
-        }
+  .main-container::-webkit-scrollbar-track {
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 4px;
+  }
 
-        .content {
-            padding: 70px 16px 70px;
-            min-height: 100vh;
-        }
+  .main-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 215, 0, 0.3);
+    border-radius: 4px;
+  }
 
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-        }
+  .main-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 215, 0, 0.5);
+  }
 
-        .nav {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background: var(--blue-medium);
-            display: flex;
-            border-top: 1px solid var(--border-light);
-            height: 56px;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
-        }
-        .nav-btn {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-dim);
-            font-size: 11px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .nav-btn.active {
-            color: var(--text-light);
-            background: rgba(255,255,255,0.15);
-            font-weight: 500;
-        }
-        .nav-btn i { font-size: 18px; margin-bottom: 4px; }
+  /* ===== BUTTONS GRID (3x2) ===== */
+  .buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 20px;
+    z-index: 10;
+    padding-bottom: 20px;
+  }
 
-        .info-card {
-            background: linear-gradient(135deg, rgba(26,35,126,0.6) 0%, rgba(40,53,147,0.6) 100%);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.15);
-            box-shadow: var(--shadow);
-        }
-        .info-label { font-size: 13px; color: var(--text-medium); margin-bottom: 6px; text-transform: uppercase; }
-        .info-value { font-size: 34px; font-weight: 700; color: #00e676; }
+  /* Responsif grid */
+  @media (max-width: 768px) {
+    .buttons-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 600px;
+    }
+  }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .stat-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 16px;
-            border-left: 4px solid;
-        }
-        .stat-card.saldo { border-left-color: var(--green-light); }
-        .stat-card.setor { border-left-color: var(--green-light); }
-        .stat-card.pengeluaran { border-left-color: var(--purple); }
-        .stat-card.pinjam { border-left-color: var(--orange); }
-        .stat-card.donatur { border-left-color: var(--yellow); }
-        .stat-label { font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
-        .stat-value { font-size: 20px; font-weight: 700; }
-        .stat-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+  @media (max-width: 480px) {
+    .buttons-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-width: 400px;
+    }
+    
+    .main-container {
+      padding: 120px 15px 15px;
+    }
+  }
 
-        .stats-grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .stat-card-3 {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 16px;
-            border-left: 4px solid;
-        }
-        .stat-card-3.saldo { border-left-color: var(--green-light); }
-        .stat-card-3.setor { border-left-color: var(--green-light); }
-        .stat-card-3.pengeluaran { border-left-color: var(--purple); }
-        .stat-card-3.pinjam { border-left-color: var(--orange); }
+  /* Landscape mode */
+  @media (max-height: 700px) and (orientation: landscape) {
+    .main-container {
+      padding: 100px 10px 10px;
+      justify-content: flex-start;
+    }
+    
+    .buttons-grid {
+      gap: 10px;
+      max-width: 95%;
+      margin-top: 10px;
+    }
+    
+    .udayana-header {
+      top: 10px;
+    }
+    
+    .udayana-logo {
+      width: 60px;
+      height: 60px;
+    }
+  }
 
-        .transaction-list {
-            max-height: 500px;
-            overflow-y: auto;
-            border-radius: 12px;
-            background: rgba(0,0,0,0.2);
-        }
-        .transaction-item {
-            padding: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .transaction-item:last-child { border-bottom: none; }
-        .transaction-type {
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
-        .transaction-type.setor { background: rgba(76,175,80,0.2); color: #81c784; }
-        .transaction-type.pengeluaran { background: rgba(198,40,40,0.2); color: #ef5350; }
-        .transaction-type.pinjam { background: rgba(245,124,0,0.2); color: #ffb74d; }
-        .transaction-type.donasi { background: rgba(255,152,0,0.2); color: #ffb74d; }
+  /* ===== BUTTON STYLES ===== */
+  .portal-button {
+    position: relative;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    overflow: visible;
+    transition: all 0.3s ease;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 140px;
+    aspect-ratio: 1/1;
+    text-align: center;
+  }
 
-        .account-list {
-            max-height: 500px;
-            overflow-y: auto;
-            border-radius: 12px;
-            background: rgba(0,0,0,0.2);
-        }
-        .account-item {
-            padding: 14px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .account-item:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        .account-item:last-child { border-bottom: none; }
-        .account-avatar {
-            width: 42px;
-            height: 42px;
-            background: var(--blue-medium);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 18px;
-        }
+  /* Tombol disabled */
+  .portal-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
 
-        .search-box {
-            position: relative;
-            margin-bottom: 16px;
-        }
-        .search-box i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-dim);
-        }
-        .search-box input {
-            width: 100%;
-            padding: 14px 12px 14px 40px;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            color: white;
-            font-size: 15px;
-            transition: all 0.2s;
-        }
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--green-light);
-            background: rgba(255,255,255,0.15);
-        }
+  /* Container logo */
+  .logo-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    position: relative;
+  }
 
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .badge.aktif { background: rgba(76,175,80,0.2); color: #81c784; }
-        .badge.nonaktif { background: rgba(198,40,40,0.2); color: #ef5350; }
-        .badge.keluar { background: rgba(158,158,158,0.2); color: #e0e0e0; }
+  .portal-button:hover:not(:disabled) .logo-container { 
+    transform: translateY(-8px) scale(1.05); 
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 
+      0 15px 35px rgba(0, 0, 0, 0.6),
+      0 0 30px rgba(255, 215, 0, 0.2);
+  }
 
-        .modal {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 16px;
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: var(--bg-card);
-            border-radius: 16px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .modal-header {
-            padding: 18px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg-card);
-            border-radius: 16px 16px 0 0;
-            flex-shrink: 0;
-        }
-        .modal-header h3 { font-size: 18px; }
-        .modal-header button {
-            background: none;
-            border: none;
-            color: var(--text-light);
-            font-size: 24px;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-        .modal-header button:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        .modal-body { 
-            padding: 20px; 
-            overflow-y: auto;
-            flex: 1;
-        }
-        .modal-footer {
-            padding: 18px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            background: var(--bg-card);
-            border-radius: 0 0 16px 16px;
-            flex-shrink: 0;
-        }
-        .modal-btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .modal-cancel { background: rgba(255,255,255,0.1); color: var(--text-light); }
-        .modal-cancel:hover { background: rgba(255,255,255,0.15); }
+  .portal-button:active:not(:disabled) .logo-container {
+    transform: translateY(-4px) scale(1.02);
+    transition: 0.1s;
+  }
 
-        /* Scrollbar styling */
-        .modal-body::-webkit-scrollbar {
-            width: 6px;
-        }
-        .modal-body::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-        }
-        .modal-body::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
-            border-radius: 10px;
-        }
-        .modal-body::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,0.3);
-        }
+  /* Logo di dalam tombol */
+  .button-logo {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+  }
 
-        .transaction-detail-item {
-            padding: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            transition: all 0.2s;
-        }
-        .transaction-detail-item:hover {
-            background: rgba(255,255,255,0.05);
-        }
-        .transaction-detail-item:last-child {
-            border-bottom: none;
-        }
+  /* Warna khusus untuk setiap logo */
+  #btn1 .button-logo {
+    filter: drop-shadow(0 0 15px rgba(0, 180, 255, 0.8));
+  }
 
-        .toast {
-            position: fixed;
-            top: 70px;
-            right: 16px;
-            background: var(--green-dark);
-            color: white;
-            padding: 14px 18px;
-            border-radius: 8px;
-            z-index: 2000;
-            animation: slideIn 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            max-width: 350px;
-        }
-        .toast.error { background: var(--red); }
-        .toast.warning { background: var(--orange); }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+  #btn2 .button-logo {
+    filter: drop-shadow(0 0 15px rgba(200, 0, 255, 0.8));
+  }
 
-        .text-dim { color: var(--text-dim); }
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        .mt-2 { margin-top: 8px; }
-        .mb-2 { margin-bottom: 8px; }
-        .ml-2 { margin-left: 8px; }
-        .mr-2 { margin-right: 8px; }
-        .hidden { display: none !important; }
-        .flex { display: flex; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .gap-2 { gap: 8px; }
-        .gap-4 { gap: 16px; }
-        .w-100 { width: 100%; }
+  #btn5 .button-logo {
+    filter: drop-shadow(0 0 15px rgba(255, 100, 100, 0.8));
+  }
 
-        .positive { color: #4caf50; }
-        .negative { color: #f44336; }
-        .neutral { color: #ff9800; }
-    </style>
+  #btn6 .button-logo {
+    filter: drop-shadow(0 0 15px rgba(100, 255, 200, 0.8));
+  }
+
+  #btn3 .button-logo,
+  #btn4 .button-logo {
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+  }
+
+  .portal-button:hover:not(:disabled) .button-logo {
+    transform: scale(1.15) rotate(5deg);
+  }
+
+  /* Text under logo */
+  .button-text {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.3;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    margin-top: 8px;
+    padding: 0 5px;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @media (max-width: 768px) {
+    .portal-button {
+      min-height: 120px;
+    }
+    
+    .logo-container {
+      border-radius: 15px;
+    }
+    
+    .button-logo {
+      width: 60px;
+      height: 60px;
+    }
+    
+    .button-text {
+      font-size: 12px;
+      letter-spacing: 1.2px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .portal-button {
+      min-height: 110px;
+    }
+    
+    .button-logo {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .button-text {
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+  }
+
+  /* ===== CONTROL BUTTONS ===== */
+  .control-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
+    z-index: 1000;
+  }
+
+  .control-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 215, 0, 0.2);
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+  }
+
+  .control-btn:hover {
+    transform: scale(1.1);
+    background: rgba(255, 215, 0, 0.3);
+    border-color: rgba(255, 215, 0, 0.8);
+  }
+
+  /* ===== UPDATE BADGE & NOTIFICATION ===== */
+  .update-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 20px;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(255, 215, 0, 0.5);
+    animation: pulse 2s infinite;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.5px;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* Update Modal */
+  .update-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: linear-gradient(145deg, #1a2635, #0f1a2a);
+    padding: 25px;
+    border-radius: 25px;
+    z-index: 10001;
+    max-width: 380px;
+    width: 90%;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(20px);
+    color: white;
+  }
+
+  .update-modal.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .update-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+    padding-bottom: 15px;
+  }
+
+  .update-icon {
+    font-size: 40px;
+    animation: gentlePulse 2s infinite;
+  }
+
+  .update-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  }
+
+  .update-version {
+    background: rgba(255, 215, 0, 0.15);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    display: inline-block;
+    margin-bottom: 15px;
+  }
+
+  .update-changelog {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    padding: 18px;
+    margin: 20px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .changelog-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .changelog-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .changelog-icon {
+    font-size: 20px;
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .changelog-text {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .update-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+  }
+
+  .update-btn {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .update-btn-primary {
+    background: linear-gradient(145deg, #ffd700, #ff8c00);
+    color: #000;
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+  }
+
+  .update-btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
+  }
+
+  .update-btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    backdrop-filter: blur(5px);
+  }
+
+  .update-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 215, 0, 0.6);
+  }
+
+  /* Update progress */
+  .update-progress {
+    margin-top: 20px;
+    display: none;
+  }
+
+  .update-progress.show {
+    display: block;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+
+  .progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #ffd700, #ff8c00);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  .progress-text {
+    font-size: 14px;
+    color: #ffd700;
+    text-align: center;
+  }
+
+  /* Update overlay */
+  .update-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .update-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* ===== LOADING OVERLAY ===== */
+  .loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #0a1525 0%, #071121 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
+    gap: 25px;
+    transition: opacity 0.5s ease;
+  }
+
+  .loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .loading-logo {
+    width: 120px;
+    height: 120px;
+    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+    animation: gentlePulse 2s infinite alternate;
+  }
+
+  .loading-text {
+    color: #ffd700;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  }
+
+  /* Status bar untuk loading */
+  .status-bar {
+    width: 200px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+
+  .status-progress {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #ffd700, #ff8c00);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  /* ===== SIMPLE RIPPLE EFFECT ===== */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0);
+    animation: ripple-animation 0.6s linear;
+  }
+
+  @keyframes ripple-animation {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  /* ===== TOAST NOTIFICATION ===== */
+  .toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(0, 0, 0, 0.8);
+    color: #ffd700;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 14px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    text-align: center;
+    max-width: 90%;
+  }
+
+  .toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ===== INSTALL BUTTON ===== */
+  .install-button {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    padding: 12px 20px;
+    background: linear-gradient(145deg, rgba(255, 215, 0, 0.9), rgba(255, 140, 0, 0.9));
+    color: black;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 10000;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+    display: none;
+  }
+
+  .install-button:hover {
+    transform: scale(1.1);
+  }
+
+  /* Update info button */
+  .update-info-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #ffd700, #ff8c00);
+    border: none;
+    color: #000;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    animation: gentlePulse 2s infinite;
+  }
+
+  .update-info-btn:hover {
+    transform: scale(1.15) rotate(90deg);
+  }
+
+  .update-info-btn .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4444;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    animation: pulse 2s infinite;
+  }
+</style>
 </head>
+
 <body>
-    <div class="header">
-        <h1><i class="fas fa-university"></i> Dashboard Kas Pura - Koramil Sukasada</h1>
-        <div class="header-actions">
-            <button class="header-btn" id="printReport" title="Cetak Laporan">
-                <i class="fas fa-print"></i>
-            </button>
-            <button class="header-btn" id="refreshData" title="Refresh">
-                <i class="fas fa-sync-alt"></i>
-            </button>
-        </div>
-    </div>
-
-    <div class="content" id="content"></div>
-
-    <div class="nav">
-        <button class="nav-btn active" data-tab="dashboard">
-            <i class="fas fa-chart-pie"></i>
-            <span>Dashboard</span>
-        </button>
-        <button class="nav-btn" data-tab="rekening">
-            <i class="fas fa-users"></i>
-            <span>Rekening</span>
-        </button>
-    </div>
-
-    <script>
-        // ==================== KONFIGURASI ====================
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzkRyVBF-QDP5kKH3wz28YvN6zDQ1CEY89sX2aO4WMAExW5zmx5Mn-cOUQiG5W8kOs-/exec';
-        const API_TOKEN = 'KasPuraKoramil';
-
-        // ==================== STATE ====================
-        let state = {
-            tab: 'dashboard',
-            accounts: [],
-            donatur: [],
-            globalBalance: 0,
-            transactions: [],
-            stats: {
-                totalSetor: 0, totalPengeluaran: 0, totalPinjam: 0, totalDonasi: 0,
-                countSetor: 0, countPengeluaran: 0, countPinjam: 0, countDonasi: 0
-            },
-            searchQuery: ''
-        };
-
-        // ==================== INISIALISASI ====================
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const tab = btn.dataset.tab;
-                    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    loadTab(tab);
-                });
-            });
-
-            document.getElementById('refreshData')?.addEventListener('click', () => {
-                showToast('Memuat ulang data...');
-                loadData();
-            });
-
-            document.getElementById('printReport')?.addEventListener('click', () => {
-                cetakLaporan();
-            });
-
-            loadData();
-            
-            // Register service worker for PWA
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('✅ Service Worker registered:', reg.scope))
-                    .catch(err => console.log('❌ Service Worker registration failed:', err));
-            }
-        });
-
-        // ==================== LOAD DATA ====================
-        async function loadData() {
-            try {
-                const [nasabahRes, donaturRes, saldoRes, riwayatRes] = await Promise.all([
-                    fetch(`${API_URL}?action=getNasabah&token=${API_TOKEN}`),
-                    fetch(`${API_URL}?action=getDonatur&token=${API_TOKEN}`),
-                    fetch(`${API_URL}?action=getAllSaldo&token=${API_TOKEN}`),
-                    fetch(`${API_URL}?action=getRiwayat&token=${API_TOKEN}&limit=1000`) // Increased limit
-                ]);
-
-                const nasabahData = await nasabahRes.json();
-                if (nasabahData.status === 'success') state.accounts = nasabahData.data || [];
-
-                const donaturData = await donaturRes.json();
-                if (donaturData.status === 'success') state.donatur = donaturData.data || [];
-
-                const saldoData = await saldoRes.json();
-                if (saldoData.status === 'success') state.globalBalance = saldoData.data?.saldo_global || 0;
-
-                const riwayatData = await riwayatRes.json();
-                if (riwayatData.status === 'success') {
-                    state.transactions = riwayatData.data || [];
-                    hitungStatistik();
-                }
-
-                renderTab();
-            } catch (error) {
-                showToast('Gagal memuat data: ' + error.message, true);
-            }
-        }
-
-        function hitungStatistik() {
-            const stats = {
-                totalSetor: 0, totalPengeluaran: 0, totalPinjam: 0, totalDonasi: 0,
-                countSetor: 0, countPengeluaran: 0, countPinjam: 0, countDonasi: 0
-            };
-            state.transactions.forEach(t => {
-                const nominal = t.nominal || 0;
-                const jenis = (t.jenis || t.type || '').toUpperCase();
-                
-                switch(jenis) {
-                    case 'SETOR': 
-                        stats.totalSetor += nominal; 
-                        stats.countSetor++; 
-                        break;
-                    case 'PENGELUARAN': 
-                        stats.totalPengeluaran += nominal; 
-                        stats.countPengeluaran++; 
-                        break;
-                    case 'PINJAM': 
-                        stats.totalPinjam += nominal; 
-                        stats.countPinjam++; 
-                        break;
-                    case 'DONASI': 
-                        stats.totalDonasi += nominal; 
-                        stats.countDonasi++; 
-                        break;
-                }
-            });
-            state.stats = stats;
-        }
-
-        function renderTab() {
-            const content = document.getElementById('content');
-            switch (state.tab) {
-                case 'dashboard': content.innerHTML = renderDashboard(); break;
-                case 'rekening': content.innerHTML = renderRekening(); attachRekeningEvents(); break;
-            }
-        }
-
-        function loadTab(tab) {
-            state.tab = tab;
-            renderTab();
-        }
-
-        // ==================== DASHBOARD ====================
-        function renderDashboard() {
-            const totalPemasukan = state.stats.totalSetor + state.stats.totalDonasi;
-            const totalPengeluaran = state.stats.totalPengeluaran + state.stats.totalPinjam;
-            
-            return `
-                <div class="card">
-                    <h3 style="margin-bottom: 16px;"><i class="fas fa-chart-pie"></i> Dashboard Keuangan</h3>
-                    <div class="info-card">
-                        <div class="info-label">Saldo Global</div>
-                        <div class="info-value">${formatRupiah(state.globalBalance)}</div>
-                        <div class="stat-sub" style="margin-top: 10px;">
-                            ${state.transactions.length} transaksi | 
-                            ${state.accounts.length} nasabah | 
-                            ${state.donatur.length} donatur
-                        </div>
-                    </div>
-
-                    <div class="stats-grid">
-                        <div class="stat-card saldo">
-                            <div class="stat-label">Total Pemasukan</div>
-                            <div class="stat-value positive">${formatRupiah(totalPemasukan)}</div>
-                            <div class="stat-sub">${state.stats.countSetor + state.stats.countDonasi} transaksi</div>
-                        </div>
-                        <div class="stat-card pengeluaran">
-                            <div class="stat-label">Total Pengeluaran</div>
-                            <div class="stat-value negative">${formatRupiah(totalPengeluaran)}</div>
-                            <div class="stat-sub">${state.stats.countPengeluaran + state.stats.countPinjam} transaksi</div>
-                        </div>
-                    </div>
-
-                    <div class="stats-grid-3">
-                        <div class="stat-card-3 setor">
-                            <div class="stat-label">SETOR</div>
-                            <div class="stat-value positive">${formatRupiah(state.stats.totalSetor)}</div>
-                            <div class="stat-sub">${state.stats.countSetor}x</div>
-                        </div>
-                        <div class="stat-card-3 pinjam">
-                            <div class="stat-label">PINJAM</div>
-                            <div class="stat-value neutral">${formatRupiah(state.stats.totalPinjam)}</div>
-                            <div class="stat-sub">${state.stats.countPinjam}x</div>
-                        </div>
-                        <div class="stat-card-3 pengeluaran">
-                            <div class="stat-label">PENGELUARAN</div>
-                            <div class="stat-value negative">${formatRupiah(state.stats.totalPengeluaran)}</div>
-                            <div class="stat-sub">${state.stats.countPengeluaran}x</div>
-                        </div>
-                    </div>
-
-                    ${state.stats.totalDonasi > 0 ? `
-                        <div style="margin-top: 8px; margin-bottom: 16px; background: rgba(255,152,0,0.1); padding: 12px; border-radius: 8px;">
-                            <div class="flex-between">
-                                <span><i class="fas fa-hand-holding-heart" style="color: var(--yellow);"></i> Total Donasi Masuk</span>
-                                <span class="positive">${formatRupiah(state.stats.totalDonasi)}</span>
-                            </div>
-                            <div class="stat-sub text-right">${state.stats.countDonasi} kali donasi</div>
-                        </div>
-                    ` : ''}
-
-                    <h4 style="margin: 20px 0 12px;">Semua Transaksi</h4>
-                    <div class="transaction-list">
-                        ${state.transactions.length === 0 ? 
-                            '<div class="text-dim text-center" style="padding: 20px;">Belum ada transaksi</div>' : 
-                            state.transactions.map(t => {
-                                const jenis = (t.jenis || t.type || '-').toUpperCase();
-                                const nominal = t.nominal || t.amount || 0;
-                                const nama = t.nama || t.name || '-';
-                                const tanggal = t.tanggal || t.date || '-';
-                                const nominalClass = jenis === 'SETOR' || jenis === 'DONASI' ? 'positive' : 'negative';
-                                
-                                return `
-                                    <div class="transaction-item">
-                                        <div>
-                                            <span class="transaction-type ${jenis.toLowerCase()}">${jenis}</span>
-                                            <span style="font-size: 12px; color: var(--text-dim); margin-left: 8px;">
-                                                ${formatTanggal(tanggal)}
-                                            </span>
-                                            <div style="font-size: 12px; margin-top: 4px; color: var(--text-medium);">
-                                                ${nama}
-                                            </div>
-                                        </div>
-                                        <span class="${nominalClass}">${formatNominalWithSign(nominal, jenis)}</span>
-                                    </div>
-                                `;
-                            }).join('')
-                        }
-                    </div>
-                </div>
-            `;
-        }
-
-        // ==================== CETAK LAPORAN ====================
-        function cetakLaporan() {
-            const printWindow = window.open('', '_blank');
-            
-            const totalPemasukan = state.stats.totalSetor + state.stats.totalDonasi;
-            const totalPengeluaran = state.stats.totalPengeluaran + state.stats.totalPinjam;
-            
-            const html = `<!DOCTYPE html>
-<html>
-<head>
-    <title>Laporan Kas Pura - Koramil Sukasada</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Times New Roman', Times, serif; 
-            padding: 15px;
-            background: white;
-            color: black;
-            line-height: 1.4;
-            font-size: 11pt;
-        }
-        .kop {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #1a237e;
-            padding-bottom: 10px;
-        }
-        .kop h1 {
-            font-size: 18pt;
-            font-weight: bold;
-            color: #1a237e;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-        .kop h3 {
-            font-size: 12pt;
-            font-weight: normal;
-            color: #333;
-        }
-        .kop p { font-size: 10pt; color: #666; }
-        .info-box {
-            border: 1px solid #000;
-            padding: 10px;
-            margin-bottom: 15px;
-            background: #f9f9f9;
-        }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 11pt;
-        }
-        .info-label { font-weight: bold; width: 150px; }
-        .info-value { flex: 1; }
-        .summary-section {
-            margin-bottom: 20px;
-            border: 1px solid #000;
-        }
-        .summary-header {
-            background: #1a237e;
-            color: white;
-            padding: 8px 10px;
-            font-weight: bold;
-            font-size: 12pt;
-        }
-        .summary-content {
-            padding: 10px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        .summary-item {
-            border-bottom: 1px dotted #999;
-            padding: 5px 0;
-            display: flex;
-            justify-content: space-between;
-        }
-        .summary-item.total {
-            border-top: 2px solid #000;
-            border-bottom: none;
-            margin-top: 10px;
-            padding-top: 10px;
-            font-weight: bold;
-            font-size: 12pt;
-            grid-column: span 2;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 10pt;
-        }
-        th {
-            background: #1a237e;
-            color: white;
-            padding: 8px 4px;
-            text-align: center;
-            font-weight: bold;
-            border: 1px solid #333;
-        }
-        td {
-            padding: 6px 4px;
-            border: 1px solid #333;
-            vertical-align: top;
-        }
-        .text-right { text-align: right; }
-        .text-center { text-align: center; }
-        .positive { color: #006600; font-weight: bold; }
-        .negative { color: #cc0000; font-weight: bold; }
-        .footer {
-            margin-top: 30px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 10pt;
-        }
-        .signature {
-            width: 200px;
-            text-align: center;
-        }
-        .signature-line {
-            margin-top: 40px;
-            border-top: 1px solid #000;
-            padding-top: 5px;
-        }
-        @media print {
-            body { padding: 10px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="kop">
-        <h1>LAPORAN KAS PURA</h1>
-        <h3>Koramil Sukasada</h3>
-        <p>Periode: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-    </div>
-
-    <div class="info-box">
-        <div class="info-row"><span class="info-label">Saldo Global</span><span class="info-value">: ${formatRupiah(state.globalBalance)}</span></div>
-        <div class="info-row"><span class="info-label">Total Nasabah</span><span class="info-value">: ${state.accounts.length} orang</span></div>
-        <div class="info-row"><span class="info-label">Total Donatur</span><span class="info-value">: ${state.donatur.length} orang</span></div>
-        <div class="info-row"><span class="info-label">Total Transaksi</span><span class="info-value">: ${state.transactions.length} kali</span></div>
-    </div>
-
-    <div class="summary-section">
-        <div class="summary-header">RINGKASAN TRANSAKSI</div>
-        <div class="summary-content">
-            <div class="summary-item"><span>Total Pemasukan</span><span class="positive">${formatRupiah(totalPemasukan)}</span></div>
-            <div class="summary-item"><span>Total Pengeluaran</span><span class="negative">${formatRupiah(totalPengeluaran)}</span></div>
-            <div class="summary-item"><span style="margin-left: 20px;">- SETOR</span><span>${formatRupiah(state.stats.totalSetor)}</span></div>
-            <div class="summary-item"><span style="margin-left: 20px;">- DONASI</span><span class="positive">${formatRupiah(state.stats.totalDonasi)}</span></div>
-            <div class="summary-item"><span style="margin-left: 20px;">- PINJAM</span><span class="neutral">${formatRupiah(state.stats.totalPinjam)}</span></div>
-            <div class="summary-item"><span style="margin-left: 20px;">- PENGELUARAN</span><span class="negative">${formatRupiah(state.stats.totalPengeluaran)}</span></div>
-            <div class="summary-item total"><span>SALDO AKHIR</span><span style="color: #1a237e;">${formatRupiah(state.globalBalance)}</span></div>
-        </div>
-    </div>
-
-    <h3 style="margin: 20px 0 10px;">DAFTAR TRANSAKSI</h3>
-    
-    <table>
-        <thead>
-            <tr>
-                <th width="5%">No</th>
-                <th width="12%">Tanggal</th>
-                <th width="10%">Jenis</th>
-                <th width="10%">NRP</th>
-                <th width="15%">Nama</th>
-                <th width="15%">Nominal</th>
-                <th width="33%">Keterangan</th>
-            </tr>
-        </thead>
-        <tbody>
-            ${state.transactions.map((t, index) => {
-                const tanggal = t.tanggal ? formatTanggalLengkap(t.tanggal) : '-';
-                const jenis = t.jenis || t.type || '-';
-                const nominal = t.nominal || t.amount || 0;
-                const nama = t.nama || t.name || '-';
-                const nrp = t.nrp || t.NRP || t.nasabah_id || t.id_nasabah || '-';
-                const keterangan = t.keterangan || t.description || '-';
-                const nominalClass = jenis === 'SETOR' || jenis === 'DONASI' ? 'positive' : 'negative';
-                const nominalDisplay = jenis === 'SETOR' || jenis === 'DONASI' 
-                    ? formatRupiah(nominal) 
-                    : '(' + formatRupiah(nominal) + ')';
-                
-                return `
-                    <tr>
-                        <td class="text-center">${index + 1}</td>
-                        <td class="text-center">${tanggal}</td>
-                        <td class="text-center">${jenis}</td>
-                        <td class="text-center">${nrp}</td>
-                        <td>${nama}</td>
-                        <td class="text-right ${nominalClass}">${nominalDisplay}</td>
-                        <td>${keterangan}</td>
-                    </tr>
-                `;
-            }).join('')}
-        </tbody>
-    </table>
-
-<!-- FOOTER: UJUNG KANAN -->
-<div style="text-align: right; margin-top: 70px; width: 100%;">
-    <div style="display: inline-block; text-align: center;">
-        Sukasada, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}<br>
-        Mengetahui,<br>
-        <br>
-        <br>
-        Bendahara
-    </div>
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Lambang_Kodam_Udayana.svg" 
+       alt="Udayana" class="loading-logo">
+  <div class="loading-text">UDAYANA PORTAL</div>
+  <div class="status-bar">
+    <div class="status-progress" id="statusProgress"></div>
+  </div>
 </div>
-</body>
-</html>`;
-            
-            printWindow.document.write(html);
-            printWindow.document.close();
-            printWindow.print();
-        }
 
-        // ==================== REKENING ====================
-        function renderRekening() {
-            const filteredAccounts = state.accounts.filter(acc => 
-                acc.nama.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
-                (acc.id && acc.id.toLowerCase().includes(state.searchQuery.toLowerCase())) ||
-                (acc.nrp && acc.nrp.toLowerCase().includes(state.searchQuery.toLowerCase()))
-            );
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
 
-            return `
-                <div class="card">
-                    <h3 style="margin-bottom: 16px;"><i class="fas fa-users"></i> Daftar Rekening</h3>
+<!-- Install Button (akan muncul otomatis) -->
+<button class="install-button" id="installBtn">📲 Install App</button>
 
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="searchAccount" placeholder="Cari NRP atau Nama..." 
-                               value="${state.searchQuery}">
-                    </div>
+<!-- Update Info Button -->
+<button class="update-info-btn" id="updateInfoBtn" title="Info Update">
+  🚀
+  <span class="badge" id="updateBadge">1</span>
+</button>
 
-                    <div class="account-list">
-                        ${filteredAccounts.length === 0 ? 
-                            '<div class="text-dim text-center" style="padding: 30px;">Belum ada nasabah</div>' : 
-                            filteredAccounts.map(acc => {
-                                const nrp = acc.id || acc.nrp || '-';
-                                return `
-                                    <div class="account-item" onclick="viewAccountDetail('${nrp}')">
-                                        <div class="account-avatar">${acc.nama.charAt(0).toUpperCase()}</div>
-                                        <div style="flex: 1;">
-                                            <div style="font-weight: 600;">${acc.nama}</div>
-                                            <div class="flex-between">
-                                                <span class="text-dim" style="font-size: 12px;">NRP: ${nrp}</span>
-                                                <span class="badge ${(acc.status || 'aktif').toLowerCase()}">${acc.status || 'AKTIF'}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('')
-                        }
-                    </div>
-                </div>
-            `;
-        }
+<!-- Update Modal -->
+<div class="update-overlay" id="updateOverlay"></div>
+<div class="update-modal" id="updateModal">
+  <div class="update-modal-header">
+    <span class="update-icon">🚀</span>
+    <span class="update-title">UPDATE TERSEDIA!</span>
+  </div>
+  
+  <div class="update-version">Versi 2.5.0</div>
+  
+  <div class="update-changelog">
+    <div class="changelog-item">
+      <span class="changelog-icon">✨</span>
+      <span class="changelog-text">Tampilan baru yang lebih modern dan responsif</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-icon">🚀</span>
+      <span class="changelog-text">Performa 2x lebih cepat dengan optimasi loading</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-icon">🔒</span>
+      <span class="changelog-text">Keamanan ditingkatkan dengan enkripsi data</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-icon">🌙</span>
+      <span class="changelog-text">Mode gelap otomatis mengikuti sistem</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-icon">📱</span>
+      <span class="changelog-text">Navigasi lebih mudah di perangkat mobile</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-icon">🐛</span>
+      <span class="changelog-text">Perbaikan bug pada beberapa tombol</span>
+    </div>
+  </div>
+  
+  <div class="update-progress" id="updateProgress">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">Mengunduh update...</div>
+  </div>
+  
+  <div class="update-buttons">
+    <button class="update-btn update-btn-secondary" id="laterBtn">Nanti</button>
+    <button class="update-btn update-btn-primary" id="updateNowBtn">UPDATE NOW</button>
+  </div>
+</div>
 
-        function attachRekeningEvents() {
-            document.getElementById('searchAccount')?.addEventListener('input', (e) => {
-                state.searchQuery = e.target.value;
-                renderTab();
-            });
-        }
+<!-- Header dengan logo Udayana -->
+<div class="udayana-header">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Lambang_Kodam_Udayana.svg" 
+       alt="Lambang Kodam Udayana" class="udayana-logo">
+  <div class="udayana-title">UDAYANA PORTAL</div>
+</div>
 
-        // ==================== DETAIL NASABAH DENGAN SCROLL UNTUK RATUSAN TRANSAKSI ====================
-        window.viewAccountDetail = function(nrp) {
-            const account = state.accounts.find(a => a.id === nrp || a.nrp === nrp);
-            if (!account) return;
+<!-- Control buttons -->
+<div class="control-buttons">
+  <button class="control-btn" id="infoBtn" title="Info">ⓘ</button>
+  <button class="control-btn" id="fullscreenBtn" title="Fullscreen">⛶</button>
+</div>
 
-            // Filter transaksi berdasarkan NRP (menangani berbagai format field)
-            const transaksi = state.transactions.filter(t => {
-                const tNrp = t.nrp || t.NRP || t.nasabah_id || t.id_nasabah || t.no_rekening || '';
-                return tNrp.toString() === nrp.toString();
-            });
-
-            // Urutkan dari terbaru ke terlama
-            transaksi.sort((a, b) => {
-                const dateA = new Date(a.tanggal || a.date || 0);
-                const dateB = new Date(b.tanggal || b.date || 0);
-                return dateB - dateA;
-            });
-
-            // Hitung total setor dan pinjam
-            const totalSetor = transaksi.filter(t => {
-                const jenis = (t.jenis || t.type || '').toUpperCase();
-                return jenis === 'SETOR';
-            }).reduce((sum, t) => sum + (t.nominal || t.amount || 0), 0);
-            
-            const totalPinjam = transaksi.filter(t => {
-                const jenis = (t.jenis || t.type || '').toUpperCase();
-                return jenis === 'PINJAM';
-            }).reduce((sum, t) => sum + (t.nominal || t.amount || 0), 0);
-            
-            const saldo = totalSetor - totalPinjam;
-
-            // Hitung statistik transaksi
-            const countSetor = transaksi.filter(t => (t.jenis || t.type || '').toUpperCase() === 'SETOR').length;
-            const countPinjam = transaksi.filter(t => (t.jenis || t.type || '').toUpperCase() === 'PINJAM').length;
-            const countLainnya = transaksi.length - countSetor - countPinjam;
-
-            const modal = document.createElement('div'); 
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3><i class="fas fa-user-circle"></i> Detail Nasabah</h3>
-                        <button onclick="this.closest('.modal').remove()">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Profile Section -->
-                        <div style="text-align: center; margin-bottom: 24px;">
-                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--blue-medium), var(--purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 600; margin: 0 auto 12px; border: 3px solid rgba(255,255,255,0.2);">
-                                ${account.nama.charAt(0).toUpperCase()}
-                            </div>
-                            <h4 style="font-size: 22px; margin-bottom: 6px;">${account.nama}</h4>
-                            <div class="badge ${(account.status || 'aktif').toLowerCase()}" style="font-size: 13px; padding: 6px 16px;">
-                                ${account.status || 'AKTIF'}
-                            </div>
-                        </div>
-
-                        <!-- Info Pribadi Card -->
-                        <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 18px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1);">
-                            <h5 style="margin-bottom: 14px; color: var(--text-medium); display: flex; align-items: center; gap: 8px;">
-                                <i class="fas fa-id-card"></i> Informasi Pribadi
-                            </h5>
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                                <div>
-                                    <div class="text-dim" style="font-size: 11px;">NRP</div>
-                                    <div style="font-weight: 600;">${account.id || account.nrp || '-'}</div>
-                                </div>
-                                <div>
-                                    <div class="text-dim" style="font-size: 11px;">No HP</div>
-                                    <div>${account.no_hp || '-'}</div>
-                                </div>
-                                <div>
-                                    <div class="text-dim" style="font-size: 11px;">Tempat Lahir</div>
-                                    <div>${account.tempat_lahir || '-'}</div>
-                                </div>
-                                <div>
-                                    <div class="text-dim" style="font-size: 11px;">Tanggal Lahir</div>
-                                    <div>${account.tanggal_lahir || '-'}</div>
-                                </div>
-                                <div style="grid-column: span 2;">
-                                    <div class="text-dim" style="font-size: 11px;">Email</div>
-                                    <div>${account.email || '-'}</div>
-                                </div>
-                                <div style="grid-column: span 2;">
-                                    <div class="text-dim" style="font-size: 11px;">Alamat</div>
-                                    <div>${account.alamat || '-'}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Ringkasan Keuangan -->
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
-                            <div style="background: rgba(76,175,80,0.15); padding: 14px 8px; border-radius: 12px; text-align: center; border: 1px solid rgba(76,175,80,0.3);">
-                                <div class="text-dim" style="font-size: 10px; margin-bottom: 4px;">SETOR</div>
-                                <div class="positive" style="font-size: 18px; font-weight: 700;">${formatRupiah(totalSetor)}</div>
-                                <div style="font-size: 10px; color: var(--text-dim);">${countSetor} transaksi</div>
-                            </div>
-                            <div style="background: rgba(245,124,0,0.15); padding: 14px 8px; border-radius: 12px; text-align: center; border: 1px solid rgba(245,124,0,0.3);">
-                                <div class="text-dim" style="font-size: 10px; margin-bottom: 4px;">PINJAM</div>
-                                <div class="neutral" style="font-size: 18px; font-weight: 700;">${formatRupiah(totalPinjam)}</div>
-                                <div style="font-size: 10px; color: var(--text-dim);">${countPinjam} transaksi</div>
-                            </div>
-                            <div style="background: rgba(255,255,255,0.1); padding: 14px 8px; border-radius: 12px; text-align: center;">
-                                <div class="text-dim" style="font-size: 10px; margin-bottom: 4px;">LAINNYA</div>
-                                <div style="font-size: 18px; font-weight: 700; color: var(--text-dim);">${countLainnya}</div>
-                                <div style="font-size: 10px; color: var(--text-dim);">transaksi</div>
-                            </div>
-                        </div>
-
-                        <!-- Saldo Akhir Card -->
-                        <div style="background: linear-gradient(135deg, rgba(26,35,126,0.4) 0%, rgba(40,53,147,0.4) 100%); padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.15);">
-                            <div class="flex-between">
-                                <div>
-                                    <div class="text-dim" style="font-size: 12px; margin-bottom: 4px;">Saldo Akhir</div>
-                                    <div style="font-size: 28px; font-weight: 700; color: ${saldo >= 0 ? '#4caf50' : '#f44336'}">
-                                        ${formatRupiah(saldo)}
-                                    </div>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div class="text-dim" style="font-size: 12px;">Total Transaksi</div>
-                                    <div style="font-size: 24px; font-weight: 600;">${transaksi.length}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Riwayat Transaksi dengan Scroll -->
-                        <div>
-                            <div class="flex-between" style="margin-bottom: 14px;">
-                                <h5 style="color: var(--text-medium); display: flex; align-items: center; gap: 6px;">
-                                    <i class="fas fa-history"></i> Riwayat Transaksi
-                                </h5>
-                                <span style="background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; font-size: 12px;">
-                                    ${transaksi.length} transaksi
-                                </span>
-                            </div>
-                            
-                            ${transaksi.length === 0 ? 
-                                `<div style="text-align: center; padding: 40px 20px; background: rgba(255,255,255,0.02); border-radius: 12px;">
-                                    <i class="fas fa-exchange-alt" style="font-size: 48px; opacity: 0.2; margin-bottom: 12px;"></i>
-                                    <div class="text-dim">Belum ada transaksi untuk nasabah ini</div>
-                                </div>` : 
-                                `<div style="max-height: 350px; overflow-y: auto; border-radius: 12px; background: rgba(0,0,0,0.3); padding: 4px;">
-                                    ${transaksi.map((t, index) => {
-                                        const nominal = t.nominal || t.amount || 0;
-                                        const jenis = (t.jenis || t.type || '-').toUpperCase();
-                                        const tanggal = t.tanggal || t.date || '-';
-                                        const keterangan = t.keterangan || t.description || '';
-                                        const nominalClass = jenis === 'SETOR' || jenis === 'DONASI' ? 'positive' : 'negative';
-                                        
-                                        return `
-                                            <div class="transaction-detail-item">
-                                                <div style="flex: 1;">
-                                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                                                        <span class="transaction-type ${jenis.toLowerCase()}">${jenis}</span>
-                                                        <span style="font-size: 11px; color: var(--text-dim);">
-                                                            <i class="fas fa-calendar-alt"></i> ${formatTanggal(tanggal)}
-                                                        </span>
-                                                    </div>
-                                                    ${keterangan ? `
-                                                        <div style="font-size: 11px; color: var(--text-dim); background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 6px; margin-top: 4px;">
-                                                            <i class="fas fa-comment"></i> ${keterangan}
-                                                        </div>
-                                                    ` : ''}
-                                                </div>
-                                                <div style="margin-left: 12px; text-align: right;">
-                                                    <span class="${nominalClass}" style="font-weight: 700; font-size: 15px; white-space: nowrap;">
-                                                        ${formatNominalWithSign(nominal, jenis)}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        `;
-                                    }).join('')}
-                                </div>`
-                            }
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="modal-btn modal-cancel" onclick="this.closest('.modal').remove()">
-                            <i class="fas fa-times"></i> Tutup
-                        </button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-        };
-
-        // ==================== UTILITY FUNCTIONS ====================
-        function formatRupiah(angka) {
-            return 'Rp ' + (angka || 0).toLocaleString('id-ID');
-        }
-        
-        function formatNumber(angka) {
-            return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        }
-
-        function formatNominalWithSign(angka, jenis) {
-            const jenisUpper = (jenis || '').toUpperCase();
-            if (jenisUpper === 'PENGELUARAN' || jenisUpper === 'PINJAM') {
-                return '- ' + formatRupiah(angka);
-            } else if (jenisUpper === 'SETOR' || jenisUpper === 'DONASI') {
-                return '+ ' + formatRupiah(angka);
-            } else {
-                return formatRupiah(angka);
-            }
-        }
-        
-        function formatTanggal(dateStr) {
-            if (!dateStr) return '-';
-            const d = new Date(dateStr);
-            return d.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        }
-        
-        function formatTanggalLengkap(dateStr) {
-            if (!dateStr) return '-';
-            const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-            const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-            const d = new Date(dateStr);
-            return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-        }
-        
-        function showToast(msg, isError = false) {
-            const t = document.createElement('div');
-            t.className = 'toast' + (isError ? ' error' : '');
-            t.innerHTML = `<i class="fas fa-${isError ? 'exclamation-circle' : 'check-circle'}"></i> ${msg}`;
-            document.body.appendChild(t);
-            setTimeout(() => { 
-                t.style.opacity = '0'; 
-                t.style.transform = 'translateX(100%)'; 
-                setTimeout(() => t.remove(), 300); 
-            }, 3000);
-        }
-    </script>
+<!-- Main container dengan grid tombol (6 tombol) -->
+<div class="main-container">
+  <div class="buttons-grid">
+    <!-- Tombol 1: DUKOPS -->
+    <button class="portal-button" id="btn1">
+      <div class="logo-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Lambang_Kodam_Udayana.svg" 
+             alt="DUKOPS" class="button-logo">
+        <span class="button-text">DUKOPS</span>
+      </div>
+    </button>
     
-    <!-- Service Worker for PWA -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(
-                    function(registration) {
-                        console.log('✅ Service Worker registered with scope:', registration.scope);
-                    },
-                    function(err) {
-                        console.log('❌ Service Worker registration failed:', err);
-                    }
-                );
-            });
-        }
-    </script>
+    <!-- Tombol 2: SHOW -->
+    <button class="portal-button" id="btn2">
+      <div class="logo-container">
+        <img src="https://raw.githubusercontent.com/Koramil05/JADWAL/main/LOGO%20KOREM163%20Wirasatya.png" 
+             alt="SHOW" class="button-logo">
+        <span class="button-text">SHOW</span>
+      </div>
+    </button>
+    
+    <!-- Tombol 3: GOOGLE DRIVE -->
+    <button class="portal-button" id="btn3">
+      <div class="logo-container">
+        <div class="button-logo" style="font-size: 50px; display: flex; align-items: center; justify-content: center;">📁</div>
+        <span class="button-text">GOOGLE DRIVE</span>
+      </div>
+    </button>
+    
+    <!-- Tombol 4: PEMETAAN LAHAN -->
+    <button class="portal-button" id="btn4">
+      <div class="logo-container">
+        <div class="button-logo" style="font-size: 50px; display: flex; align-items: center; justify-content: center;">🗺️</div>
+        <span class="button-text">PEMETAAN LAHAN</span>
+      </div>
+    </button>
+    
+    <!-- Tombol 5: PORTAL KD KMP -->
+    <button class="portal-button" id="btn5">
+      <div class="logo-container">
+        <div class="button-logo" style="font-size: 50px; display: flex; align-items: center; justify-content: center;">🌐</div>
+        <span class="button-text">PORTAL KDKMP</span>
+      </div>
+    </button>
+    
+    <!-- Tombol 6: LAINNYA (Custom) -->
+    <button class="portal-button" id="btn6">
+      <div class="logo-container">
+        <div class="button-logo" style="font-size: 50px; display: flex; align-items: center; justify-content: center;">⭐</div>
+        <span class="button-text">LAINNYA</span>
+      </div>
+    </button>
+  </div>
+</div>
+
+<script>
+// ===== UDAYANA PORTAL - DENGAN FITUR UPDATE =====
+
+// DOM Elements
+const loadingOverlay = document.getElementById('loadingOverlay');
+const statusProgress = document.getElementById('statusProgress');
+const toast = document.getElementById('toast');
+const installBtn = document.getElementById('installBtn');
+const infoBtn = document.getElementById('infoBtn');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
+const updateModal = document.getElementById('updateModal');
+const updateOverlay = document.getElementById('updateOverlay');
+const updateInfoBtn = document.getElementById('updateInfoBtn');
+const updateBadge = document.getElementById('updateBadge');
+const laterBtn = document.getElementById('laterBtn');
+const updateNowBtn = document.getElementById('updateNowBtn');
+const updateProgress = document.getElementById('updateProgress');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+
+// Configuration for 6 buttons
+const BUTTON_CONFIG = {
+  btn1: { 
+    url: "https://koramil05.github.io/DUKOPS/", 
+    name: "DUKOPS",
+    color: "rgba(0, 180, 255, 0.8)"
+  },
+  btn2: { 
+    url: "https://koramil05.github.io/LPST05/", 
+    name: "LPST05",
+    color: "rgba(200, 0, 255, 0.8)"
+  },
+  btn3: { 
+    url: "https://drive.google.com/drive/folders/1I5wVeLcrSS2sjlaRLCftwd9JPfbNri0l", 
+    name: "GOOGLE DRIVE",
+    color: "rgba(255, 215, 0, 0.8)"
+  },
+  btn4: { 
+    url: "https://pemetaan-lahan.portalkdkmp.id",
+    name: "PEMETAAN LAHAN",
+    color: "rgba(255, 100, 100, 0.8)"
+  },
+  btn5: { 
+    url: "https://portalkdkmp.id/",
+    name: "PORTAL KDKMP",
+    color: "rgba(100, 255, 200, 0.8)"
+  },
+  btn6: { 
+    url: "#",
+    name: "LAINNYA",
+    color: "rgba(180, 180, 255, 0.8)"
+  }
+};
+
+// PWA Variables
+let deferredPrompt;
+let updateInterval;
+
+// ===== UTILITY FUNCTIONS =====
+
+/**
+ * Show toast notification
+ */
+function showToast(message, duration = 3000) {
+  toast.textContent = message;
+  toast.classList.add('show');
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, duration);
+}
+
+/**
+ * Update loading progress
+ */
+function updateLoadingProgress(percent) {
+  statusProgress.style.width = `${percent}%`;
+}
+
+/**
+ * Create simple ripple effect
+ */
+function createRipple(event) {
+  const button = event.currentTarget;
+  const circle = document.createElement('span');
+  const diameter = Math.max(button.clientWidth, button.clientHeight);
+  const radius = diameter / 2;
+  
+  circle.style.width = circle.style.height = `${diameter}px`;
+  circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+  circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+  circle.classList.add('ripple');
+  
+  const ripple = button.getElementsByClassName('ripple')[0];
+  if (ripple) {
+    ripple.remove();
+  }
+  
+  button.appendChild(circle);
+}
+
+// ===== UPDATE FUNCTIONALITY =====
+
+/**
+ * Show update modal
+ */
+function showUpdateModal() {
+  updateOverlay.classList.add('show');
+  updateModal.classList.add('show');
+  updateBadge.style.display = 'none';
+  
+  // Auto hide after 30 seconds
+  setTimeout(() => {
+    if (updateModal.classList.contains('show')) {
+      hideUpdateModal();
+      showToast('Update dapat diakses melalui tombol 🚀', 3000);
+    }
+  }, 30000);
+}
+
+/**
+ * Hide update modal
+ */
+function hideUpdateModal() {
+  updateOverlay.classList.remove('show');
+  updateModal.classList.remove('show');
+  updateProgress.classList.remove('show');
+}
+
+/**
+ * Simulate update download
+ */
+function simulateUpdate() {
+  // Hide buttons
+  laterBtn.style.display = 'none';
+  updateNowBtn.style.display = 'none';
+  
+  // Show progress
+  updateProgress.classList.add('show');
+  
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += Math.random() * 15 + 5;
+    if (progress > 100) progress = 100;
+    
+    progressFill.style.width = `${progress}%`;
+    progressText.textContent = `Mengunduh update... ${Math.floor(progress)}%`;
+    
+    if (progress >= 100) {
+      clearInterval(interval);
+      progressText.textContent = 'Update selesai! ✨';
+      
+      setTimeout(() => {
+        hideUpdateModal();
+        showToast('Update berhasil! Aplikasi siap digunakan 🎉', 4000);
+        
+        // Reset buttons
+        laterBtn.style.display = 'block';
+        updateNowBtn.style.display = 'block';
+        
+        // Hide badge permanently
+        updateBadge.style.display = 'none';
+        
+        // Save to localStorage
+        localStorage.setItem('updateShown', 'true');
+        localStorage.setItem('updateVersion', '2.5.0');
+      }, 1000);
+    }
+  }, 200);
+  
+  // Store interval to clear if needed
+  updateInterval = interval;
+}
+
+/**
+ * Check for updates
+ */
+function checkForUpdates() {
+  const lastUpdate = localStorage.getItem('updateShown');
+  const lastVersion = localStorage.getItem('updateVersion');
+  
+  // Show update if not shown before or version changed
+  if (!lastUpdate || lastVersion !== '2.5.0') {
+    // Show after 5 seconds
+    setTimeout(() => {
+      showUpdateModal();
+    }, 5000);
+  } else {
+    // Hide badge if update already installed
+    updateBadge.style.display = 'none';
+  }
+}
+
+// ===== BUTTON HANDLERS =====
+
+/**
+ * Setup all button event listeners
+ */
+function setupButtons() {
+  Object.keys(BUTTON_CONFIG).forEach(btnId => {
+    const button = document.getElementById(btnId);
+    const config = BUTTON_CONFIG[btnId];
+    
+    button.addEventListener('click', function(e) {
+      // Skip for btn6 (custom)
+      if (btnId === 'btn6') {
+        showToast('Tombol ini dapat dikustomisasi sesuai kebutuhan');
+        return;
+      }
+      
+      // Ripple effect
+      createRipple(e);
+      
+      // Disable button temporarily
+      button.disabled = true;
+      
+      // Visual feedback
+      const logoContainer = button.querySelector('.logo-container');
+      const originalTransform = logoContainer.style.transform;
+      logoContainer.style.transform = 'scale(0.95)';
+      logoContainer.style.filter = 'brightness(1.2)';
+      
+      // Show loading toast
+      showToast(`Membuka ${config.name}...`);
+      
+      // Open URL after delay
+      setTimeout(() => {
+        window.open(config.url, '_blank', 'noopener,noreferrer');
+        
+        // Reset button after delay
+        setTimeout(() => {
+          button.disabled = false;
+          logoContainer.style.transform = originalTransform;
+          logoContainer.style.filter = '';
+        }, 1000);
+      }, 300);
+    });
+  });
+}
+
+// ===== CONTROL BUTTONS =====
+
+/**
+ * Setup control buttons
+ */
+function setupControlButtons() {
+  // Info button
+  infoBtn.addEventListener('click', () => {
+    showToast('UDAYANA PORTAL v2.5.0 - Akses cepat sistem', 4000);
+  });
+  
+  // Fullscreen button
+  fullscreenBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+      fullscreenBtn.innerHTML = '✕';
+      fullscreenBtn.title = 'Keluar Layar Penuh';
+    } else {
+      document.exitFullscreen();
+      fullscreenBtn.innerHTML = '⛶';
+      fullscreenBtn.title = 'Layar Penuh';
+    }
+  });
+  
+  // Update info button
+  updateInfoBtn.addEventListener('click', () => {
+    showUpdateModal();
+  });
+  
+  // Update modal buttons
+  laterBtn.addEventListener('click', () => {
+    hideUpdateModal();
+    showToast('Update akan diingatkan nanti', 2000);
+    
+    // Save to localStorage
+    localStorage.setItem('updateLater', 'true');
+  });
+  
+  updateNowBtn.addEventListener('click', () => {
+    simulateUpdate();
+  });
+  
+  // Close modal when clicking overlay
+  updateOverlay.addEventListener('click', () => {
+    hideUpdateModal();
+  });
+}
+
+// ===== PWA FUNCTIONALITY =====
+
+/**
+ * Register Service Worker
+ */
+async function registerServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    try {
+      // Create Service Worker code
+      const swCode = `
+        const CACHE_NAME = 'udayana-portal-v2.5.0';
+        
+        self.addEventListener('install', (event) => {
+          console.log('[Service Worker] Installing new version...');
+          self.skipWaiting();
+        });
+        
+        self.addEventListener('activate', (event) => {
+          console.log('[Service Worker] Activated');
+          event.waitUntil(clients.claim());
+        });
+        
+        self.addEventListener('fetch', (event) => {
+          event.respondWith(
+            fetch(event.request)
+              .catch(() => {
+                return new Response('Udayana Portal - Mode Offline', {
+                  headers: { 'Content-Type': 'text/html' }
+                });
+              })
+          );
+        });
+      `;
+      
+      // Create blob and register
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      const swUrl = URL.createObjectURL(blob);
+      
+      const registration = await navigator.serviceWorker.register(swUrl);
+      console.log('Service Worker registered:', registration);
+      
+      // Check for updates
+      registration.addEventListener('updatefound', () => {
+        const newWorker = registration.installing;
+        showToast('Update tersedia! 🚀', 3000);
+      });
+      
+      return registration;
+    } catch (error) {
+      console.error('Service Worker registration failed:', error);
+    }
+  }
+  return null;
+}
+
+/**
+ * Handle PWA installation
+ */
+function setupPWAInstall() {
+  // Before install prompt
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    // Show install button after 3 seconds
+    setTimeout(() => {
+      if (deferredPrompt) {
+        installBtn.style.display = 'block';
+        
+        installBtn.addEventListener('click', async () => {
+          if (!deferredPrompt) return;
+          
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          
+          if (outcome === 'accepted') {
+            console.log('User accepted PWA install');
+            installBtn.style.display = 'none';
+            showToast('Aplikasi sedang diinstal...', 2000);
+          } else {
+            showToast('Instalasi dibatalkan', 2000);
+          }
+          
+          deferredPrompt = null;
+        });
+      }
+    }, 3000);
+  });
+  
+  // App installed event
+  window.addEventListener('appinstalled', () => {
+    console.log('PWA was installed');
+    installBtn.style.display = 'none';
+    showToast('Aplikasi berhasil diinstal! 🎉', 3000);
+  });
+}
+
+/**
+ * Create Web App Manifest dynamically
+ */
+function createWebAppManifest() {
+  const manifest = {
+    "name": "Udayana Portal",
+    "short_name": "SUKASADA05",
+    "description": "Portal Akses Cepat Kodam Udayana v2.5.0",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0a1525",
+    "theme_color": "#000000",
+    "orientation": "portrait",
+    "icons": [
+      {
+        "src": "/favicon-32x32.png",
+        "sizes": "32x32",
+        "type": "image/png"
+      },
+      {
+        "src": "/apple-touch-icon.png",
+        "sizes": "180x180",
+        "type": "image/png"
+      }
+    ]
+  };
+  
+  // Add manifest to page
+  const manifestElement = document.createElement('link');
+  manifestElement.rel = 'manifest';
+  manifestElement.href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifest));
+  document.head.appendChild(manifestElement);
+}
+
+// ===== INITIALIZATION =====
+
+/**
+ * Initialize the application
+ */
+async function initializeApp() {
+  console.log('🚀 Initializing Udayana Portal v2.5.0...');
+  
+  // Update loading progress
+  let progress = 0;
+  const loadingInterval = setInterval(() => {
+    progress += Math.random() * 15 + 10;
+    if (progress > 100) progress = 100;
+    updateLoadingProgress(progress);
+    
+    if (progress >= 100) {
+      clearInterval(loadingInterval);
+      
+      // Hide loading overlay
+      setTimeout(() => {
+        loadingOverlay.style.opacity = '0';
+        setTimeout(() => {
+          loadingOverlay.classList.add('hidden');
+          showToast('Portal siap digunakan! v2.5.0', 2000);
+        }, 500);
+      }, 500);
+    }
+  }, 150);
+  
+  // Setup buttons
+  setupButtons();
+  
+  // Setup control buttons
+  setupControlButtons();
+  
+  // Create Web App Manifest
+  createWebAppManifest();
+  
+  // Setup PWA installation
+  setupPWAInstall();
+  
+  // Register Service Worker
+  await registerServiceWorker();
+  
+  // Check for updates
+  checkForUpdates();
+  
+  // Check if running as PWA
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    console.log('📱 Running as installed PWA');
+    showToast('Mode aplikasi aktif v2.5.0', 2000);
+  }
+  
+  console.log('✅ Udayana Portal v2.5.0 initialized successfully');
+}
+
+// ===== START APPLICATION =====
+
+// Start when DOM is loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+  initializeApp();
+}
+
+// Handle orientation changes
+window.addEventListener('orientationchange', () => {
+  setTimeout(() => {
+    // Force reflow for responsive adjustments
+    window.dispatchEvent(new Event('resize'));
+  }, 300);
+});
+
+// Handle online/offline status
+window.addEventListener('online', () => {
+  showToast('Koneksi internet tersedia', 2000);
+});
+
+window.addEventListener('offline', () => {
+  showToast('Mode offline aktif', 3000);
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  // Ctrl/Cmd + 1-6 untuk tombol
+  if ((e.ctrlKey || e.metaKey) && e.key >= '1' && e.key <= '6') {
+    e.preventDefault();
+    const buttonId = `btn${e.key}`;
+    const button = document.getElementById(buttonId);
+    if (button) button.click();
+  }
+  
+  // F11 untuk fullscreen
+  if (e.key === 'F11') {
+    e.preventDefault();
+    fullscreenBtn.click();
+  }
+  
+  // F5 untuk refresh
+  if (e.key === 'F5') {
+    e.preventDefault();
+    showToast('Memperbarui halaman...', 1000);
+    setTimeout(() => location.reload(), 100);
+  }
+  
+  // U untuk update
+  if (e.key === 'u' || e.key === 'U') {
+    e.preventDefault();
+    showUpdateModal();
+  }
+});
+
+// Clean up intervals on page unload
+window.addEventListener('beforeunload', () => {
+  if (updateInterval) {
+    clearInterval(updateInterval);
+  }
+});
+</script>
 </body>
 </html>
