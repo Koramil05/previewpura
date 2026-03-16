@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard Kas Pura - Koramil Sukasada</title>
+    
+    <!-- ====== PWA ASSETS ====== -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/Koramil05/PURA05/main/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Koramil05/PURA05/main/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/Koramil05/PURA05/main/favicon-16x16.png">
+    <link rel="manifest" href="https://raw.githubusercontent.com/Koramil05/PURA05/main/site.webmanifest">
+    <meta name="theme-color" content="#1a237e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kas Pura">
+    <meta name="application-name" content="Kas Pura">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ====== VARIABLES ====== */
+        :root {
+            --blue-dark: #0a192f;
+            --blue-medium: #1a237e;
+            --green-dark: #1b5e20;
+            --green-light: #4caf50;
+            --red: #c62828;
+            --orange: #f57c00;
+            --purple: #7b1fa2;
+            --yellow: #ff9800;
+            --text-light: #ffffff;
+            --text-medium: #e3f2fd;
+            --text-dim: #90a4ae;
+            --bg-card: rgba(25, 35, 45, 0.95);
+            --border-light: rgba(255, 255, 255, 0.25);
+            --shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--blue-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: var(--blue-medium);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-light);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .header h1 { font-size: 18px; font-weight: 600; }
+        .header-actions { display: flex; gap: 12px; }
+        .header-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .header-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+
+        .content {
+            padding: 70px 16px 70px;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: var(--blue-medium);
+            display: flex;
+            border-top: 1px solid var(--border-light);
+            height: 56px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+        }
+        .nav-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            font-size: 11px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-btn.active {
+            color: var(--text-light);
+            background: rgba(255,255,255,0.15);
+            font-weight: 500;
+        }
+        .nav-btn i { font-size: 18px; margin-bottom: 4px; }
+
+        .info-card {
+            background: linear-gradient(135deg, rgba(26,35,126,0.6) 0%, rgba(40,53,147,0.6) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: var(--shadow);
+        }
+        .info-label { font-size: 13px; color: var(--text-medium); margin-bottom: 6px; text-transform: uppercase; }
+        .info-value { font-size: 34px; font-weight: 700; color: #00e676; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid;
+        }
+        .stat-card.saldo { border-left-color: var(--green-light); }
+        .stat-card.setor { border-left-color: var(--green-light); }
+        .stat-card.pengeluaran { border-left-color: var(--purple); }
+        .stat-card.pinjam { border-left-color: var(--orange); }
+        .stat-card.donatur { border-left-color: var(--yellow); }
+        .stat-label { font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
+        .stat-value { font-size: 20px; font-weight: 700; }
+        .stat-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+        .stats-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-card-3 {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid;
+        }
+        .stat-card-3.saldo { border-left-color: var(--green-light); }
+        .stat-card-3.setor { border-left-color: var(--green-light); }
+        .stat-card-3.pengeluaran { border-left-color: var(--purple); }
+        .stat-card-3.pinjam { border-left-color: var(--orange); }
+
+        .transaction-list {
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.2);
+        }
+        .transaction-item {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .transaction-item:last-child { border-bottom: none; }
+        .transaction-type {
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        .transaction-type.setor { background: rgba(76,175,80,0.2); color: #81c784; }
+        .transaction-type.pengeluaran { background: rgba(198,40,40,0.2); color: #ef5350; }
+        .transaction-type.pinjam { background: rgba(245,124,0,0.2); color: #ffb74d; }
+        .transaction-type.donasi { background: rgba(255,152,0,0.2); color: #ffb74d; }
+
+        .account-list {
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.2);
+        }
+        .account-item {
+            padding: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .account-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .account-item:last-child { border-bottom: none; }
+        .account-avatar {
+            width: 42px;
+            height: 42px;
+            background: var(--blue-medium);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+        }
+        .search-box input {
+            width: 100%;
+            padding: 14px 12px 14px 40px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--green-light);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge.aktif { background: rgba(76,175,80,0.2); color: #81c784; }
+        .badge.nonaktif { background: rgba(198,40,40,0.2); color: #ef5350; }
+        .badge.keluar { background: rgba(158,158,158,0.2); color: #e0e0e0; }
+
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .modal-header {
+            padding: 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            border-radius: 16px 16px 0 0;
+            flex-shrink: 0;
+        }
+        .modal-header h3 { font-size: 18px; }
+        .modal-header button {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 24px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .modal-header button:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .modal-body { 
+            padding: 20px; 
+            overflow-y: auto;
+            flex: 1;
+        }
+        .modal-footer {
+            padding: 18px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            background: var(--bg-card);
+            border-radius: 0 0 16px 16px;
+            flex-shrink: 0;
+        }
+        .modal-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .modal-cancel { background: rgba(255,255,255,0.1); color: var(--text-light); }
+        .modal-cancel:hover { background: rgba(255,255,255,0.15); }
+
+        /* Scrollbar styling */
+        .modal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal-body::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+        .modal-body::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .transaction-detail-item {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: all 0.2s;
+        }
+        .transaction-detail-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .transaction-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .toast {
+            position: fixed;
+            top: 70px;
+            right: 16px;
+            background: var(--green-dark);
+            color: white;
+            padding: 14px 18px;
+            border-radius: 8px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            max-width: 350px;
+        }
+        .toast.error { background: var(--red); }
+        .toast.warning { background: var(--orange); }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .text-dim { color: var(--text-dim); }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .mt-2 { margin-top: 8px; }
+        .mb-2 { margin-bottom: 8px; }
+        .ml-2 { margin-left: 8px; }
+        .mr-2 { margin-right: 8px; }
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .gap-2 { gap: 8px; }
+        .gap-4 { gap: 16px; }
+        .w-100 { width: 100%; }
+
+        .positive { color: #4caf50; }
+        .negative { color: #f44336; }
+        .neutral { color: #ff9800; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-university"></i> Dashboard Kas Pura - Koramil Sukasada</h1>
+        <div class="header-actions">
+            <button class="header-btn" id="printReport" title="Cetak Laporan">
+                <i class="fas fa-print"></i>
+            </button>
+            <button class="header-btn" id="refreshData" title="Refresh">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="content" id="content"></div>
+
+    <div class="nav">
+        <button class="nav-btn active" data-tab="dashboard">
+            <i class="fas fa-chart-pie"></i>
+            <span>Dashboard</span>
+        </button>
+        <button class="nav-btn" data-tab="rekening">
+            <i class="fas fa-users"></i>
+            <span>Rekening</span>
+        </button>
+    </div>
+
+    <script>
+        // ==================== KONFIGURASI ====================
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzkRyVBF-QDP5kKH3wz28YvN6zDQ1CEY89sX2aO4WMAExW5zmx5Mn-cOUQiG5W8kOs-/exec';
+        const API_TOKEN = 'KasPuraKoramil';
+
+        // ==================== STATE ====================
+        let state = {
+            tab: 'dashboard',
+            accounts: [],
+            donatur: [],
+            globalBalance: 0,
+            transactions: [],
+            stats: {
+                totalSetor: 0, totalPengeluaran: 0, totalPinjam: 0, totalDonasi: 0,
+                countSetor: 0, countPengeluaran: 0, countPinjam: 0, countDonasi: 0
+            },
+            searchQuery: ''
+        };
+
+        // ==================== INISIALISASI ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.dataset.tab;
+                    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    loadTab(tab);
+                });
+            });
+
+            document.getElementById('refreshData')?.addEventListener('click', () => {
+                showToast('Memuat ulang data...');
+                loadData();
+            });
+
+            document.getElementById('printReport')?.addEventListener('click', () => {
+                cetakLaporan();
+            });
+
+            loadData();
+            
+            // Register service worker for PWA
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+                    .catch(err => console.log('❌ Service Worker registration failed:', err));
+            }
+        });
+
+        // ==================== LOAD DATA ====================
+        async function loadData() {
+            try {
+                const [nasabahRes, donaturRes, saldoRes, riwayatRes] = await Promise.all([
+                    fetch(`${API_URL}?action=getNasabah&token=${API_TOKEN}`),
+                    fetch(`${API_URL}?action=getDonatur&token=${API_TOKEN}`),
+                    fetch(`${API_URL}?action=getAllSaldo&token=${API_TOKEN}`),
+                    fetch(`${API_URL}?action=getRiwayat&token=${API_TOKEN}&limit=1000`) // Increased limit
+                ]);
+
+                const nasabahData = await nasabahRes.json();
+                if (nasabahData.status === 'success') state.accounts = nasabahData.data || [];
+
+                const donaturData = await donaturRes.json();
+                if (donaturData.status === 'success') state.donatur = donaturData.data || [];
+
+                const saldoData = await saldoRes.json();
+                if (saldoData.status === 'success') state.globalBalance = saldoData.data?.saldo_global || 0;
+
+                const riwayatData = await riwayatRes.json();
+                if (riwayatData.status === 'success') {
+                    state.transactions = riwayatData.data || [];
+                    hitungStatistik();
+                }
+
+                renderTab();
+            } catch (error) {
+                showToast('Gagal memuat data: ' + error.message, true);
+            }
+        }
+
+        function hitungStatistik() {
+            const stats = {
+                totalSetor: 0, totalPengeluaran: 0, totalPinjam: 0, totalDonasi: 0,
+                countSetor: 0, countPengeluaran: 0, countPinjam: 0, countDonasi: 0
+            };
+            state.transactions.forEach(t => {
+                const nominal = t.nominal || 0;
+                const jenis = (t.jenis || t.type || '').toUpperCase();
+                
+                switch(jenis) {
+                    case 'SETOR': 
+                        stats.totalSetor += nominal; 
+                        stats.countSetor++; 
+                        break;
+                    case 'PENGELUARAN': 
+                        stats.totalPengeluaran += nominal; 
+                        stats.countPengeluaran++; 
+                        break;
+                    case 'PINJAM': 
+                        stats.totalPinjam += nominal; 
+                        stats.countPinjam++; 
+                        break;
+                    case 'DONASI': 
+                        stats.totalDonasi += nominal; 
+                        stats.countDonasi++; 
+                        break;
+                }
+            });
+            state.stats = stats;
+        }
+
+        function renderTab() {
+            const content = document.getElementById('content');
+            switch (state.tab) {
+                case 'dashboard': content.innerHTML = renderDashboard(); break;
+                case 'rekening': content.innerHTML = renderRekening(); attachRekeningEvents(); break;
+            }
+        }
+
+        function loadTab(tab) {
+            state.tab = tab;
+            renderTab();
+        }
+
+        // ==================== DASHBOARD ====================
+        function renderDashboard() {
+            const totalPemasukan = state.stats.totalSetor + state.stats.totalDonasi;
+            const totalPengeluaran = state.stats.totalPengeluaran + state.stats.totalPinjam;
+            
+            return `
+                <div class="card">
+                    <h3 style="margin-bottom: 16px;"><i class="fas fa-chart-pie"></i> Dashboard Keuangan</h3>
+                    <div class="info-card">
+                        <div class="info-label">Saldo Global</div>
+                        <div class="info-value">${formatRupiah(state.globalBalance)}</div>
+                        <div class="stat-sub" style="margin-top: 10px;">
+                            ${state.transactions.length} transaksi | 
+                            ${state.accounts.length} nasabah | 
+                            ${state.donatur.length} donatur
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card saldo">
+                            <div class="stat-label">Total Pemasukan</div>
+                            <div class="stat-value positive">${formatRupiah(totalPemasukan)}</div>
+                            <div class="stat-sub">${state.stats.countSetor + state.stats.countDonasi} transaksi</div>
+                        </div>
+                        <div class="stat-card pengeluaran">
+                            <div class="stat-label">Total Pengeluaran</div>
+                            <div class="stat-value negative">${formatRupiah(totalPengeluaran)}</div>
+                            <div class="stat-sub">${state.stats.countPengeluaran + state.stats.countPinjam} transaksi</div>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid-3">
+                        <div class="stat-card-3 setor">
+                            <div class="stat-label">SETOR</div>
+                            <div class="stat-value positive">${formatRupiah(state.stats.totalSetor)}</div>
+                            <div class="stat-sub">${state.stats.countSetor}x</div>
+                        </div>
+                        <div class="stat-card-3 pinjam">
+                            <div class="stat-label">PINJAM</div>
+                            <div class="stat-value neutral">${formatRupiah(state.stats.totalPinjam)}</div>
+                            <div class="stat-sub">${state.stats.countPinjam}x</div>
+                        </div>
+                        <div class="stat-card-3 pengeluaran">
+                            <div class="stat-label">PENGELUARAN</div>
+                            <div class="stat-value negative">${formatRupiah(state.stats.totalPengeluaran)}</div>
+                            <div class="stat-sub">${state.stats.countPengeluaran}x</div>
+                        </div>
+                    </div>
+
+                    ${state.stats.totalDonasi > 0 ? `
+                        <div style="margin-top: 8px; margin-bottom: 16px; background: rgba(255,152,0,0.1); padding: 12px; border-radius: 8px;">
+                            <div class="flex-between">
+                                <span><i class="fas fa-hand-holding-heart" style="color: var(--yellow);"></i> Total Donasi Masuk</span>
+                                <span class="positive">${formatRupiah(state.stats.totalDonasi)}</span>
+                            </div>
+                            <div class="stat-sub text-right">${state.stats.countDonasi} kali donasi</div>
+                        </div>
+                    ` : ''}
+
+                    <h4 style="margin: 20px 0 12px;">Semua Transaksi</h4>
+                    <div class="transaction-list">
+                        ${state.transactions.length === 0 ? 
+                            '<div class="text-dim text-center" style="padding: 20px;">Belum ada transaksi</div>' : 
+                            state.transactions.map(t => {
+                                const jenis = (t.jenis || t.type || '-').toUpperCase();
+                                const nominal = t.nominal || t.amount || 0;
+                                const nama = t.nama || t.name || '-';
+                                const tanggal = t.tanggal || t.date || '-';
+                                const nominalClass = jenis === 'SETOR' || jenis === 'DONASI' ? 'positive' : 'negative';
+                                
+                                return `
+                                    <div class="transaction-item">
+                                        <div>
+                                            <span class="transaction-type ${jenis.toLowerCase()}">${jenis}</span>
+                                            <span style="font-size: 12px; color: var(--text-dim); margin-left: 8px;">
+                                                ${formatTanggal(tanggal)}
+                                            </span>
+                                            <div style="font-size: 12px; margin-top: 4px; color: var(--text-medium);">
+                                                ${nama}
+                                            </div>
+                                        </div>
+                                        <span class="${nominalClass}">${formatNominalWithSign(nominal, jenis)}</span>
+                                    </div>
+                                `;
+                            }).join('')
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==================== CETAK LAPORAN ====================
+        function cetakLaporan() {
+            const printWindow = window.open('', '_blank');
+            
+            const totalPemasukan = state.stats.totalSetor + state.stats.totalDonasi;
+            const totalPengeluaran = state.stats.totalPengeluaran + state.stats.totalPinjam;
+            
+            const html = `<!DOCTYPE html>
+<html>
+<head>
+    <title>Laporan Kas Pura - Koramil Sukasada</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Times New Roman', Times, serif; 
+            padding: 15px;
+            background: white;
+            color: black;
+            line-height: 1.4;
+            font-size: 11pt;
+        }
+        .kop {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #1a237e;
+            padding-bottom: 10px;
+        }
+        .kop h1 {
+            font-size: 18pt;
+            font-weight: bold;
+            color: #1a237e;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .kop h3 {
+            font-size: 12pt;
+            font-weight: normal;
+            color: #333;
+        }
+        .kop p { font-size: 10pt; color: #666; }
+        .info-box {
+            border: 1px solid #000;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 11pt;
+        }
+        .info-label { font-weight: bold; width: 150px; }
+        .info-value { flex: 1; }
+        .summary-section {
+            margin-bottom: 20px;
+            border: 1px solid #000;
+        }
+        .summary-header {
+            background: #1a237e;
+            color: white;
+            padding: 8px 10px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        .summary-content {
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .summary-item {
+            border-bottom: 1px dotted #999;
+            padding: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .summary-item.total {
+            border-top: 2px solid #000;
+            border-bottom: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            font-weight: bold;
+            font-size: 12pt;
+            grid-column: span 2;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 10pt;
+        }
+        th {
+            background: #1a237e;
+            color: white;
+            padding: 8px 4px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #333;
+        }
+        td {
+            padding: 6px 4px;
+            border: 1px solid #333;
+            vertical-align: top;
+        }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .positive { color: #006600; font-weight: bold; }
+        .negative { color: #cc0000; font-weight: bold; }
+        .footer {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 10pt;
+        }
+        .signature {
+            width: 200px;
+            text-align: center;
+        }
+        .signature-line {
+            margin-top: 40px;
+            border-top: 1px solid #000;
+            padding-top: 5px;
+        }
+        @media print {
+            body { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="kop">
+        <h1>LAPORAN KAS PURA</h1>
+        <h3>Koramil Sukasada</h3>
+        <p>Periode: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+    </div>
+
+    <div class="info-box">
+        <div class="info-row"><span class="info-label">Saldo Global</span><span class="info-value">: ${formatRupiah(state.globalBalance)}</span></div>
+        <div class="info-row"><span class="info-label">Total Nasabah</span><span class="info-value">: ${state.accounts.length} orang</span></div>
+        <div class="info-row"><span class="info-label">Total Donatur</span><span class="info-value">: ${state.donatur.length} orang</span></div>
+        <div class="info-row"><span class="info-label">Total Transaksi</span><span class="info-value">: ${state.transactions.length} kali</span></div>
+    </div>
+
+    <div class="summary-section">
+        <div class="summary-header">RINGKASAN TRANSAKSI</div>
+        <div class="summary-content">
+            <div class="summary-item"><span>Total Pemasukan</span><span class="positive">${formatRupiah(totalPemasukan)}</span></div>
+            <div class="summary-item"><span>Total Pengeluaran</span><span class="negative">${formatRupiah(totalPengeluaran)}</span></div>
+            <div class="summary-item"><span style="margin-left: 20px;">- SETOR</span><span>${formatRupiah(state.stats.totalSetor)}</span></div>
+            <div class="summary-item"><span style="margin-left: 20px;">- DONASI</span><span class="positive">${formatRupiah(state.stats.totalDonasi)}</span></div>
+            <div class="summary-item"><span style="margin-left: 20px;">- PINJAM</span><span class="neutral">${formatRupiah(state.stats.totalPinjam)}</span></div>
+            <div class="summary-item"><span style="margin-left: 20px;">- PENGELUARAN</span><span class="negative">${formatRupiah(state.stats.totalPengeluaran)}</span></div>
+            <div class="summary-item total"><span>SALDO AKHIR</span><span style="color: #1a237e;">${formatRupiah(state.globalBalance)}</span></div>
+        </div>
+    </div>
+
+    <h3 style="margin: 20px 0 10px;">DAFTAR TRANSAKSI</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th width="5%">No</th>
+                <th width="12%">Tanggal</th>
+                <th width="10%">Jenis</th>
+                <th width="10%">NRP</th>
+                <th width="15%">Nama</th>
+                <th width="15%">Nominal</th>
+                <th width="33%">Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${state.transactions.map((t, index) => {
+                const tanggal = t.tanggal ? formatTanggalLengkap(t.tanggal) : '-';
+                const jenis = t.jenis || t.type || '-';
+                const nominal = t.nominal || t.amount || 0;
+                const nama = t.nama || t.name || '-';
+                const nrp = t.nrp || t.NRP || t.nasabah_id || t.id_nasabah || '-';
+                const keterangan = t.keterangan || t.description || '-';
+                const nominalClass = jenis === 'SETOR' || jenis === 'DONASI' ? 'positive' : 'negative';
+                const nominalDisplay = jenis === 'SETOR' || jenis === 'DONASI' 
+                    ? formatRupiah(nominal) 
+                    : '(' + formatRupiah(nominal) + ')';
+                
+                return `
+                    <tr>
+                        <td class="text-center">${index + 1}</td>
+                        <td class="text-center">${tanggal}</td>
+                        <td class="text-center">${jenis}</td>
+                        <td class="text-center">${nrp}</td>
+                        <td>${nama}</td>
+                        <td class="text-right ${nominalClass}">${nominalDisplay}</td>
+                        <td>${keterangan}</td>
+                    </tr>
+                `;
+            }).join('')}
+        </tbody>
+    </table>
+
+<!-- FOOTER: UJUNG KANAN -->
+<div style="text-align: right; margin-top: 70px; width: 100%;">
+    <div style="display: inline-block; text-align: center;">
+        Sukasada, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}<br>
+        Mengetahui,<br>
+        <br>
+        <br>
+        Bendahara
+    </div>
+</div>
+</body>
+</html>`;
+            
+            printWindow.document.write(html);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // ==================== REKENING ====================
+        function renderRekening() {
+            const filteredAccounts = state.accounts.filter(acc => 
+                acc.nama.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+                (acc.id && acc.id.toLowerCase().includes(state.searchQuery.toLowerCase())) ||
+                (acc.nrp && acc.nrp.toLowerCase().includes(state.searchQuery.toLowerCase()))
+            );
+
+            return `
+                <div class="card">
+                    <h3 style="margin-bottom: 16px;"><i class="fas fa-users"></i> Daftar Rekening</h3>
+
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchAccount" placeholder="Cari NRP atau Nama..." 
+                               value="${state.searchQuery}">
+                    </div>
+
+                    <div class="account-list">
+                        ${filteredAccounts.length === 0 ? 
+                            '<div class="text-dim text-center" style="padding: 30px;">Belum ada nasabah</div>' : 
+                            filteredAccounts.map(acc => {
+                                const nrp = acc.id || acc.nrp || '-';
+                                return `
+                                    <div class="account-item" onclick="viewAccountDetail('${nrp}')">
+                                        <div class="account-avatar">${acc.nama.charAt(0).toUpperCase()}</div>
+                                        <div style="flex: 1;">
+                                            <div style="font-weight: 600;">${acc.nama}</div>
+                                            <div class="flex-between">
+                                                <span class="text-dim" style="font-size: 12px;">NRP: ${nrp}</span>
+                                                <span class="badge ${(acc.status || 'aktif').toLowerCase()}">${acc.status || 'AKTIF'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        function attachRekeningEvents() {
+            document.getElementById('searchAccount')?.addEventListener('input', (e) => {
+                state.searchQuery = e.target.value;
+                renderTab();
+            });
+        }
+
+        // ==================== DETAIL NASABAH DENGAN SCROLL UNTUK RATUSAN TRANSAKSI ====================
+        window.viewAccountDetail = function(nrp) {
+            const account = state.accounts.find(a => a.id === nrp || a.nrp === nrp);
+            if (!account) return;
+
+            // Filter transaksi berdasarkan NRP (menangani berbagai format field)
+            const transaksi = state.transactions.filter(t => {
+                const tNrp = t.nrp || t.NRP || t.nasabah_id || t.id_nasabah || t.no_rekening || '';
+                return tNrp.toString() === nrp.toString();
+            });
+
+            // Urutkan dari terbaru ke terlama
+            transaksi.sort((a, b) => {
+                const dateA = new Date(a.tanggal || a.date || 0);
+                const dateB = new Date(b.tanggal || b.date || 0);
+                return dateB - dateA;
+            });
+
+            // Hitung total setor dan pinjam
+            const totalSetor = transaksi.filter(t => {
+                const jenis = (t.jenis || t.type || '').toUpperCase();
+                return jenis === 'SETOR';
+            }).reduce((sum, t) => sum + (t.nominal || t.amount || 0), 0);
+            
+            const totalPinjam = transaksi.filter(t => {
+                const jenis = (t.jenis || t.type || '').toUpperCase();
+                return jenis === 'PINJAM';
+            }).reduce((sum, t) => sum + (t.nominal || t.amount || 0), 0);
+            
+            const saldo = totalSetor - totalPinjam;
+
+            // Hitung statistik transaksi
+            const countSetor = transaksi.filter(t => (t.jenis || t.type || '').toUpperCase() === 'SETOR').length;
+            const countPinjam = transaksi.filter(t => (t.jenis || t.type || '').toUpperCase() === 'PINJAM').length;
+            const countLainnya = transaksi.length - countSetor - countPinjam;
+
+            const modal = document.createElement('div'); 
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3><i class="fas fa-user-circle"></i> Detail Nasabah</h3>
+                        <button onclick="this.closest('.modal').remove()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Profile Section -->
+                        <div style="text-align: center; margin-bottom: 24px;">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--blue-medium), var(--purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 600; margin: 0 auto 12px; border: 3px solid rgba(255,255,255,0.2);">
+                                ${account.nama.charAt(0).toUpperCase()}
+                            </div>
+                            <h4 style="font-size: 22px; margin-bottom: 6px;">${account.nama}</h4>
+                            <div class="badge ${(account.status || 'aktif').toLowerCase()}" style="font-size: 13px; padding: 6px 16px;">
+                                ${account.status || 'AKTIF'}
+                            </div>
+                        </div>
+
+                        <!-- Info Pribadi Card -->
+                        <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 18px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1);">
+                            <h5 style="margin-bottom: 14px; color: var(--text-medium); display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-id-card"></i> Informasi Pribadi
+                            </h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                                <div>
+                                    <div class="text-dim" style="font-size: 11px;">NRP</div>
+                                    <div style="font-weight: 600;">${account.id || account.nrp || '-'}</div>
+                                </div>
+                                <div>
+                                    <div class="text-dim" style="font-size: 11px;">No HP</div>
+                                    <div>${account.no_hp || '-'}</div>
+                                </div>
+                                <div>
+                                    <div class="text-dim" style="font-size: 11px;">Tempat Lahir</div>
+                                    <div>${account.tempat_lahir || '-'}</div>
+                                </div>
+                                <div>
+                                    <div class="text-dim" style="font-size: 11px;">Tanggal Lahir</div>
+                                    <div>${account.tanggal_lahir || '-'}</div>
+                                </div>
+                                <div style="grid-column: span 2;">
+                                    <div class="text-dim" style="font-size: 11px;">Email</div>
+                                    <div>${account.email || '-'}</div>
+                                </div>
+                                <div style="grid-column: span 2;">
+                                    <div class="text-dim" style="font-size: 11px;">Alamat</div>
+                                    <div>${account.alamat || '-'}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ringkasan Keuangan -->
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+                            <div style="background: rgba(76,175,80,0.15); padding: 14px 8px; border-radius: 12px; text-align: center; border: 1px solid rgba(76,175,80,0.3);">
+                                <div class="text-dim" style="font-size: 10px; margin-bottom: 4px;">SETOR</div>
+                                <div class="positive" style="font-size: 18px; font-weight: 700;">${formatRupiah(totalSetor)}</div>
+                                <div style="font-size: 10px; color: var(--text-dim);">${countSetor} transaksi</div>
+                            </div>
+                            <div style="background: rgba(245,124,0,0.15); padding: 14px 8px; border-radius: 12px; text-align: center; border: 1px solid rgba(245,124,0,0.3);">
+                                <div class="text-dim" style="font-size: 10px; margin-bottom: 4px;">PINJAM</div>
+                                <div class="neutral" style="font-size: 18px; font-weight: 700;">${formatRupiah(totalPinjam)}</div>
+                                <div style="font-size: 10px; color: var(--text-dim);">${countPinjam} transaksi</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 14px 8px; border-radius: 12px; text-align: center;">
+                                <div class="text-dim" style="font-size: 10px; margin-bottom: 4px;">LAINNYA</div>
+                                <div style="font-size: 18px; font-weight: 700; color: var(--text-dim);">${countLainnya}</div>
+                                <div style="font-size: 10px; color: var(--text-dim);">transaksi</div>
+                            </div>
+                        </div>
+
+                        <!-- Saldo Akhir Card -->
+                        <div style="background: linear-gradient(135deg, rgba(26,35,126,0.4) 0%, rgba(40,53,147,0.4) 100%); padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.15);">
+                            <div class="flex-between">
+                                <div>
+                                    <div class="text-dim" style="font-size: 12px; margin-bottom: 4px;">Saldo Akhir</div>
+                                    <div style="font-size: 28px; font-weight: 700; color: ${saldo >= 0 ? '#4caf50' : '#f44336'}">
+                                        ${formatRupiah(saldo)}
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div class="text-dim" style="font-size: 12px;">Total Transaksi</div>
+                                    <div style="font-size: 24px; font-weight: 600;">${transaksi.length}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Riwayat Transaksi dengan Scroll -->
+                        <div>
+                            <div class="flex-between" style="margin-bottom: 14px;">
+                                <h5 style="color: var(--text-medium); display: flex; align-items: center; gap: 6px;">
+                                    <i class="fas fa-history"></i> Riwayat Transaksi
+                                </h5>
+                                <span style="background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; font-size: 12px;">
+                                    ${transaksi.length} transaksi
+                                </span>
+                            </div>
+                            
+                            ${transaksi.length === 0 ? 
+                                `<div style="text-align: center; padding: 40px 20px; background: rgba(255,255,255,0.02); border-radius: 12px;">
+                                    <i class="fas fa-exchange-alt" style="font-size: 48px; opacity: 0.2; margin-bottom: 12px;"></i>
+                                    <div class="text-dim">Belum ada transaksi untuk nasabah ini</div>
+                                </div>` : 
+                                `<div style="max-height: 350px; overflow-y: auto; border-radius: 12px; background: rgba(0,0,0,0.3); padding: 4px;">
+                                    ${transaksi.map((t, index) => {
+                                        const nominal = t.nominal || t.amount || 0;
+                                        const jenis = (t.jenis || t.type || '-').toUpperCase();
+                                        const tanggal = t.tanggal || t.date || '-';
+                                        const keterangan = t.keterangan || t.description || '';
+                                        const nominalClass = jenis === 'SETOR' || jenis === 'DONASI' ? 'positive' : 'negative';
+                                        
+                                        return `
+                                            <div class="transaction-detail-item">
+                                                <div style="flex: 1;">
+                                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                                        <span class="transaction-type ${jenis.toLowerCase()}">${jenis}</span>
+                                                        <span style="font-size: 11px; color: var(--text-dim);">
+                                                            <i class="fas fa-calendar-alt"></i> ${formatTanggal(tanggal)}
+                                                        </span>
+                                                    </div>
+                                                    ${keterangan ? `
+                                                        <div style="font-size: 11px; color: var(--text-dim); background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 6px; margin-top: 4px;">
+                                                            <i class="fas fa-comment"></i> ${keterangan}
+                                                        </div>
+                                                    ` : ''}
+                                                </div>
+                                                <div style="margin-left: 12px; text-align: right;">
+                                                    <span class="${nominalClass}" style="font-weight: 700; font-size: 15px; white-space: nowrap;">
+                                                        ${formatNominalWithSign(nominal, jenis)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>`
+                            }
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="modal-btn modal-cancel" onclick="this.closest('.modal').remove()">
+                            <i class="fas fa-times"></i> Tutup
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        };
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function formatRupiah(angka) {
+            return 'Rp ' + (angka || 0).toLocaleString('id-ID');
+        }
+        
+        function formatNumber(angka) {
+            return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        function formatNominalWithSign(angka, jenis) {
+            const jenisUpper = (jenis || '').toUpperCase();
+            if (jenisUpper === 'PENGELUARAN' || jenisUpper === 'PINJAM') {
+                return '- ' + formatRupiah(angka);
+            } else if (jenisUpper === 'SETOR' || jenisUpper === 'DONASI') {
+                return '+ ' + formatRupiah(angka);
+            } else {
+                return formatRupiah(angka);
+            }
+        }
+        
+        function formatTanggal(dateStr) {
+            if (!dateStr) return '-';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+        
+        function formatTanggalLengkap(dateStr) {
+            if (!dateStr) return '-';
+            const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+            const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            const d = new Date(dateStr);
+            return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+        }
+        
+        function showToast(msg, isError = false) {
+            const t = document.createElement('div');
+            t.className = 'toast' + (isError ? ' error' : '');
+            t.innerHTML = `<i class="fas fa-${isError ? 'exclamation-circle' : 'check-circle'}"></i> ${msg}`;
+            document.body.appendChild(t);
+            setTimeout(() => { 
+                t.style.opacity = '0'; 
+                t.style.transform = 'translateX(100%)'; 
+                setTimeout(() => t.remove(), 300); 
+            }, 3000);
+        }
+    </script>
+    
+    <!-- Service Worker for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(
+                    function(registration) {
+                        console.log('✅ Service Worker registered with scope:', registration.scope);
+                    },
+                    function(err) {
+                        console.log('❌ Service Worker registration failed:', err);
+                    }
+                );
+            });
+        }
+    </script>
+</body>
+</html>
