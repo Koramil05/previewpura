@@ -339,22 +339,6 @@
         .modal-cancel { background: rgba(255,255,255,0.1); color: var(--text-light); }
         .modal-cancel:hover { background: rgba(255,255,255,0.15); }
 
-        /* Scrollbar styling */
-        .modal-body::-webkit-scrollbar {
-            width: 6px;
-        }
-        .modal-body::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-        }
-        .modal-body::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
-            border-radius: 10px;
-        }
-        .modal-body::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
         .transaction-detail-item {
             padding: 12px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -365,9 +349,6 @@
         }
         .transaction-detail-item:hover {
             background: rgba(255,255,255,0.05);
-        }
-        .transaction-detail-item:last-child {
-            border-bottom: none;
         }
 
         .toast {
@@ -396,17 +377,7 @@
         .text-dim { color: var(--text-dim); }
         .text-center { text-align: center; }
         .text-right { text-align: right; }
-        .mt-2 { margin-top: 8px; }
-        .mb-2 { margin-bottom: 8px; }
-        .ml-2 { margin-left: 8px; }
-        .mr-2 { margin-right: 8px; }
-        .hidden { display: none !important; }
-        .flex { display: flex; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .gap-2 { gap: 8px; }
-        .gap-4 { gap: 16px; }
-        .w-100 { width: 100%; }
-
         .positive { color: #4caf50; }
         .negative { color: #f44336; }
         .neutral { color: #ff9800; }
@@ -439,9 +410,10 @@
     </div>
 
     <script>
-        // ==================== KONFIGURASI ====================
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzkRyVBF-QDP5kKH3wz28YvN6zDQ1CEY89sX2aO4WMAExW5zmx5Mn-cOUQiG5W8kOs-/exec';
-        const API_TOKEN = 'KasPuraKoramil';
+        // ==================== KONFIGURASI BACKEND ====================
+        // GANTI DENGAN URL DEPLOY ANDA YANG BARU
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxvNHoOFisWOYzW__JLy7WA_1BKEB4Hs3GG3v0SlgiGDfdrozLHprKGSXAV39P8yHzNSg/exec';
+        const API_TOKEN = 'kas2026';
 
         // ==================== STATE ====================
         let state = {
@@ -478,42 +450,46 @@
             });
 
             loadData();
-            
-            // Register service worker for PWA
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('✅ Service Worker registered:', reg.scope))
-                    .catch(err => console.log('❌ Service Worker registration failed:', err));
-            }
         });
 
         // ==================== LOAD DATA ====================
         async function loadData() {
             try {
-                const [nasabahRes, donaturRes, saldoRes, riwayatRes] = await Promise.all([
-                    fetch(`${API_URL}?action=getNasabah&token=${API_TOKEN}`),
-                    fetch(`${API_URL}?action=getDonatur&token=${API_TOKEN}`),
-                    fetch(`${API_URL}?action=getAllSaldo&token=${API_TOKEN}`),
-                    fetch(`${API_URL}?action=getRiwayat&token=${API_TOKEN}&limit=1000`) // Increased limit
-                ]);
+                showToast('Memuat data...');
+                
+                // Load Anggota (Nasabah)
+                const anggotaRes = await fetch(`${API_URL}?action=getAnggota&token=${API_TOKEN}`);
+                const anggotaData = await anggotaRes.json();
+                if (anggotaData.status === 'success') {
+                    state.accounts = anggotaData.data || [];
+                }
 
-                const nasabahData = await nasabahRes.json();
-                if (nasabahData.status === 'success') state.accounts = nasabahData.data || [];
-
+                // Load Donatur
+                const donaturRes = await fetch(`${API_URL}?action=getDonatur&token=${API_TOKEN}`);
                 const donaturData = await donaturRes.json();
-                if (donaturData.status === 'success') state.donatur = donaturData.data || [];
+                if (donaturData.status === 'success') {
+                    state.donatur = donaturData.data || [];
+                }
 
+                // Load Saldo Global
+                const saldoRes = await fetch(`${API_URL}?action=getSaldoGlobal&token=${API_TOKEN}`);
                 const saldoData = await saldoRes.json();
-                if (saldoData.status === 'success') state.globalBalance = saldoData.data?.saldo_global || 0;
+                if (saldoData.status === 'success') {
+                    state.globalBalance = saldoData.data?.saldo_global || 0;
+                }
 
-                const riwayatData = await riwayatRes.json();
-                if (riwayatData.status === 'success') {
-                    state.transactions = riwayatData.data || [];
+                // Load Transaksi
+                const transaksiRes = await fetch(`${API_URL}?action=getTransaksi&token=${API_TOKEN}`);
+                const transaksiData = await transaksiRes.json();
+                if (transaksiData.status === 'success') {
+                    state.transactions = transaksiData.data || [];
                     hitungStatistik();
                 }
 
                 renderTab();
+                showToast('Data berhasil dimuat');
             } catch (error) {
+                console.error('Error loading data:', error);
                 showToast('Gagal memuat data: ' + error.message, true);
             }
         }
@@ -525,7 +501,7 @@
             };
             state.transactions.forEach(t => {
                 const nominal = t.nominal || 0;
-                const jenis = (t.jenis || t.type || '').toUpperCase();
+                const jenis = (t.jenis || '').toUpperCase();
                 
                 switch(jenis) {
                     case 'SETOR': 
@@ -540,7 +516,7 @@
                         stats.totalPinjam += nominal; 
                         stats.countPinjam++; 
                         break;
-                    case 'DONASI': 
+                    case 'DONASI_UANG': 
                         stats.totalDonasi += nominal; 
                         stats.countDonasi++; 
                         break;
@@ -625,22 +601,24 @@
                     <div class="transaction-list">
                         ${state.transactions.length === 0 ? 
                             '<div class="text-dim text-center" style="padding: 20px;">Belum ada transaksi</div>' : 
-                            state.transactions.map(t => {
-                                const jenis = (t.jenis || t.type || '-').toUpperCase();
-                                const nominal = t.nominal || t.amount || 0;
-                                const nama = t.nama || t.name || '-';
-                                const tanggal = t.tanggal || t.date || '-';
-                                const nominalClass = jenis === 'SETOR' || jenis === 'DONASI' ? 'positive' : 'negative';
+                            state.transactions.slice(0, 50).map(t => {
+                                const jenis = (t.jenis || '-').toUpperCase();
+                                const nominal = t.nominal || 0;
+                                const nama = t.nama || t.id_anggota || '-';
+                                const tanggal = t.tanggal || '-';
+                                const nominalClass = jenis === 'SETOR' || jenis === 'DONASI_UANG' ? 'positive' : 'negative';
+                                const displayJenis = jenis === 'DONASI_UANG' ? 'DONASI' : jenis;
                                 
                                 return `
                                     <div class="transaction-item">
                                         <div>
-                                            <span class="transaction-type ${jenis.toLowerCase()}">${jenis}</span>
+                                            <span class="transaction-type ${displayJenis.toLowerCase()}">${displayJenis}</span>
                                             <span style="font-size: 12px; color: var(--text-dim); margin-left: 8px;">
                                                 ${formatTanggal(tanggal)}
                                             </span>
                                             <div style="font-size: 12px; margin-top: 4px; color: var(--text-medium);">
                                                 ${nama}
+                                                ${t.nama_barang ? `<span class="text-dim"> - <i class="fas fa-box"></i> ${t.nama_barang}</span>` : ''}
                                             </div>
                                         </div>
                                         <span class="${nominalClass}">${formatNominalWithSign(nominal, jenis)}</span>
@@ -648,6 +626,7 @@
                                 `;
                             }).join('')
                         }
+                        ${state.transactions.length > 50 ? '<div class="text-dim text-center" style="padding: 10px;">Menampilkan 50 transaksi terbaru</div>' : ''}
                     </div>
                 </div>
             `;
@@ -668,7 +647,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Times New Roman', Times, serif; 
-            padding: 15px;
+            padding: 20px;
             background: white;
             color: black;
             line-height: 1.4;
@@ -680,18 +659,8 @@
             border-bottom: 2px solid #1a237e;
             padding-bottom: 10px;
         }
-        .kop h1 {
-            font-size: 18pt;
-            font-weight: bold;
-            color: #1a237e;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-        .kop h3 {
-            font-size: 12pt;
-            font-weight: normal;
-            color: #333;
-        }
+        .kop h1 { font-size: 18pt; color: #1a237e; margin-bottom: 5px; text-transform: uppercase; }
+        .kop h3 { font-size: 12pt; font-weight: normal; color: #333; }
         .kop p { font-size: 10pt; color: #666; }
         .info-box {
             border: 1px solid #000;
@@ -699,87 +668,22 @@
             margin-bottom: 15px;
             background: #f9f9f9;
         }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 11pt;
-        }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
         .info-label { font-weight: bold; width: 150px; }
-        .info-value { flex: 1; }
-        .summary-section {
-            margin-bottom: 20px;
-            border: 1px solid #000;
-        }
-        .summary-header {
-            background: #1a237e;
-            color: white;
-            padding: 8px 10px;
-            font-weight: bold;
-            font-size: 12pt;
-        }
-        .summary-content {
-            padding: 10px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        .summary-item {
-            border-bottom: 1px dotted #999;
-            padding: 5px 0;
-            display: flex;
-            justify-content: space-between;
-        }
-        .summary-item.total {
-            border-top: 2px solid #000;
-            border-bottom: none;
-            margin-top: 10px;
-            padding-top: 10px;
-            font-weight: bold;
-            font-size: 12pt;
-            grid-column: span 2;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 10pt;
-        }
-        th {
-            background: #1a237e;
-            color: white;
-            padding: 8px 4px;
-            text-align: center;
-            font-weight: bold;
-            border: 1px solid #333;
-        }
-        td {
-            padding: 6px 4px;
-            border: 1px solid #333;
-            vertical-align: top;
-        }
+        .summary-section { margin-bottom: 20px; border: 1px solid #000; }
+        .summary-header { background: #1a237e; color: white; padding: 8px 10px; font-weight: bold; }
+        .summary-content { padding: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .summary-item { border-bottom: 1px dotted #999; padding: 5px 0; display: flex; justify-content: space-between; }
+        .summary-item.total { border-top: 2px solid #000; border-bottom: none; margin-top: 10px; padding-top: 10px; font-weight: bold; grid-column: span 2; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 10pt; }
+        th { background: #1a237e; color: white; padding: 8px; text-align: center; border: 1px solid #333; }
+        td { padding: 6px; border: 1px solid #333; }
         .text-right { text-align: right; }
         .text-center { text-align: center; }
         .positive { color: #006600; font-weight: bold; }
         .negative { color: #cc0000; font-weight: bold; }
-        .footer {
-            margin-top: 30px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 10pt;
-        }
-        .signature {
-            width: 200px;
-            text-align: center;
-        }
-        .signature-line {
-            margin-top: 40px;
-            border-top: 1px solid #000;
-            padding-top: 5px;
-        }
-        @media print {
-            body { padding: 10px; }
-        }
+        .footer { margin-top: 50px; text-align: right; }
+        .signature-line { margin-top: 40px; border-top: 1px solid #000; width: 200px; display: inline-block; padding-top: 5px; }
     </style>
 </head>
 <body>
@@ -790,10 +694,10 @@
     </div>
 
     <div class="info-box">
-        <div class="info-row"><span class="info-label">Saldo Global</span><span class="info-value">: ${formatRupiah(state.globalBalance)}</span></div>
-        <div class="info-row"><span class="info-label">Total Nasabah</span><span class="info-value">: ${state.accounts.length} orang</span></div>
-        <div class="info-row"><span class="info-label">Total Donatur</span><span class="info-value">: ${state.donatur.length} orang</span></div>
-        <div class="info-row"><span class="info-label">Total Transaksi</span><span class="info-value">: ${state.transactions.length} kali</span></div>
+        <div class="info-row"><span class="info-label">Saldo Global</span><span>: ${formatRupiah(state.globalBalance)}</span></div>
+        <div class="info-row"><span class="info-label">Total Nasabah</span><span>: ${state.accounts.length} orang</span></div>
+        <div class="info-row"><span class="info-label">Total Donatur</span><span>: ${state.donatur.length} orang</span></div>
+        <div class="info-row"><span class="info-label">Total Transaksi</span><span>: ${state.transactions.length} kali</span></div>
     </div>
 
     <div class="summary-section">
@@ -801,66 +705,42 @@
         <div class="summary-content">
             <div class="summary-item"><span>Total Pemasukan</span><span class="positive">${formatRupiah(totalPemasukan)}</span></div>
             <div class="summary-item"><span>Total Pengeluaran</span><span class="negative">${formatRupiah(totalPengeluaran)}</span></div>
-            <div class="summary-item"><span style="margin-left: 20px;">- SETOR</span><span>${formatRupiah(state.stats.totalSetor)}</span></div>
-            <div class="summary-item"><span style="margin-left: 20px;">- DONASI</span><span class="positive">${formatRupiah(state.stats.totalDonasi)}</span></div>
-            <div class="summary-item"><span style="margin-left: 20px;">- PINJAM</span><span class="neutral">${formatRupiah(state.stats.totalPinjam)}</span></div>
-            <div class="summary-item"><span style="margin-left: 20px;">- PENGELUARAN</span><span class="negative">${formatRupiah(state.stats.totalPengeluaran)}</span></div>
-            <div class="summary-item total"><span>SALDO AKHIR</span><span style="color: #1a237e;">${formatRupiah(state.globalBalance)}</span></div>
+            <div class="summary-item"><span>- SETOR</span><span>${formatRupiah(state.stats.totalSetor)}</span></div>
+            <div class="summary-item"><span>- DONASI</span><span class="positive">${formatRupiah(state.stats.totalDonasi)}</span></div>
+            <div class="summary-item"><span>- PINJAM</span><span class="neutral">${formatRupiah(state.stats.totalPinjam)}</span></div>
+            <div class="summary-item"><span>- PENGELUARAN</span><span class="negative">${formatRupiah(state.stats.totalPengeluaran)}</span></div>
+            <div class="summary-item total"><span>SALDO AKHIR</span><span>${formatRupiah(state.globalBalance)}</span></div>
         </div>
     </div>
 
     <h3 style="margin: 20px 0 10px;">DAFTAR TRANSAKSI</h3>
-    
     <table>
         <thead>
-            <tr>
-                <th width="5%">No</th>
-                <th width="12%">Tanggal</th>
-                <th width="10%">Jenis</th>
-                <th width="10%">NRP</th>
-                <th width="15%">Nama</th>
-                <th width="15%">Nominal</th>
-                <th width="33%">Keterangan</th>
-            </tr>
+            <tr><th>No</th><th>Tanggal</th><th>Jenis</th><th>Nama</th><th class="text-right">Nominal</th><th>Keterangan</th></tr>
         </thead>
         <tbody>
-            ${state.transactions.map((t, index) => {
+            ${state.transactions.slice(0, 200).map((t, index) => {
                 const tanggal = t.tanggal ? formatTanggalLengkap(t.tanggal) : '-';
-                const jenis = t.jenis || t.type || '-';
-                const nominal = t.nominal || t.amount || 0;
-                const nama = t.nama || t.name || '-';
-                const nrp = t.nrp || t.NRP || t.nasabah_id || t.id_nasabah || '-';
-                const keterangan = t.keterangan || t.description || '-';
-                const nominalClass = jenis === 'SETOR' || jenis === 'DONASI' ? 'positive' : 'negative';
-                const nominalDisplay = jenis === 'SETOR' || jenis === 'DONASI' 
-                    ? formatRupiah(nominal) 
-                    : '(' + formatRupiah(nominal) + ')';
-                
-                return `
-                    <tr>
-                        <td class="text-center">${index + 1}</td>
-                        <td class="text-center">${tanggal}</td>
-                        <td class="text-center">${jenis}</td>
-                        <td class="text-center">${nrp}</td>
-                        <td>${nama}</td>
-                        <td class="text-right ${nominalClass}">${nominalDisplay}</td>
-                        <td>${keterangan}</td>
-                    </tr>
-                `;
+                const jenis = t.jenis || '-';
+                const nominal = t.nominal || 0;
+                const nama = t.nama || t.id_anggota || '-';
+                const keterangan = t.keterangan || (t.nama_barang ? `Barang: ${t.nama_barang}` : '-');
+                const nominalClass = jenis === 'SETOR' || jenis === 'DONASI_UANG' ? 'positive' : 'negative';
+                const nominalDisplay = nominalClass === 'positive' ? formatRupiah(nominal) : '(' + formatRupiah(nominal) + ')';
+                const displayJenis = jenis === 'DONASI_UANG' ? 'DONASI' : jenis;
+                return `<tr><td class="text-center">${index + 1}</td><td class="text-center">${tanggal}</td><td class="text-center">${displayJenis}</td><td>${nama}</td><td class="text-right ${nominalClass}">${nominalDisplay}</td><td>${keterangan}</td></tr>`;
             }).join('')}
         </tbody>
     </table>
+    ${state.transactions.length > 200 ? '<div class="text-center text-dim">*Menampilkan 200 transaksi terbaru</div>' : ''}
 
-<!-- FOOTER: UJUNG KANAN -->
-<div style="text-align: right; margin-top: 70px; width: 100%;">
-    <div style="display: inline-block; text-align: center;">
-        Sukasada, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}<br>
-        Mengetahui,<br>
-        <br>
-        <br>
-        Bendahara
+    <div class="footer">
+        <div>
+            Sukasada, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}<br>
+            Mengetahui,<br><br><br>
+            Bendahara
+        </div>
     </div>
-</div>
 </body>
 </html>`;
             
@@ -873,8 +753,7 @@
         function renderRekening() {
             const filteredAccounts = state.accounts.filter(acc => 
                 acc.nama.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
-                (acc.id && acc.id.toLowerCase().includes(state.searchQuery.toLowerCase())) ||
-                (acc.nrp && acc.nrp.toLowerCase().includes(state.searchQuery.toLowerCase()))
+                (acc.id && acc.id.toLowerCase().includes(state.searchQuery.toLowerCase()))
             );
 
             return `
@@ -883,7 +762,7 @@
 
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" id="searchAccount" placeholder="Cari NRP atau Nama..." 
+                        <input type="text" id="searchAccount" placeholder="Cari ID atau Nama..." 
                                value="${state.searchQuery}">
                     </div>
 
@@ -891,15 +770,15 @@
                         ${filteredAccounts.length === 0 ? 
                             '<div class="text-dim text-center" style="padding: 30px;">Belum ada nasabah</div>' : 
                             filteredAccounts.map(acc => {
-                                const nrp = acc.id || acc.nrp || '-';
+                                const id = acc.id || '-';
                                 return `
-                                    <div class="account-item" onclick="viewAccountDetail('${nrp}')">
+                                    <div class="account-item" onclick="viewAccountDetail('${id}')">
                                         <div class="account-avatar">${acc.nama.charAt(0).toUpperCase()}</div>
                                         <div style="flex: 1;">
                                             <div style="font-weight: 600;">${acc.nama}</div>
                                             <div class="flex-between">
-                                                <span class="text-dim" style="font-size: 12px;">NRP: ${nrp}</span>
-                                                <span class="badge ${(acc.status || 'aktif').toLowerCase()}">${acc.status || 'AKTIF'}</span>
+                                                <span class="text-dim" style="font-size: 12px;">ID: ${id}</span>
+                                                <span class="badge ${(acc.status || 'AKTIF').toLowerCase()}">${acc.status || 'AKTIF'}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -918,41 +797,17 @@
             });
         }
 
-        // ==================== DETAIL NASABAH DENGAN SCROLL UNTUK RATUSAN TRANSAKSI ====================
-        window.viewAccountDetail = function(nrp) {
-            const account = state.accounts.find(a => a.id === nrp || a.nrp === nrp);
+        // ==================== DETAIL NASABAH ====================
+        window.viewAccountDetail = function(id) {
+            const account = state.accounts.find(a => a.id === id);
             if (!account) return;
 
-            // Filter transaksi berdasarkan NRP (menangani berbagai format field)
-            const transaksi = state.transactions.filter(t => {
-                const tNrp = t.nrp || t.NRP || t.nasabah_id || t.id_nasabah || t.no_rekening || '';
-                return tNrp.toString() === nrp.toString();
-            });
+            const transaksi = state.transactions.filter(t => t.id_anggota === id);
+            transaksi.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
 
-            // Urutkan dari terbaru ke terlama
-            transaksi.sort((a, b) => {
-                const dateA = new Date(a.tanggal || a.date || 0);
-                const dateB = new Date(b.tanggal || b.date || 0);
-                return dateB - dateA;
-            });
-
-            // Hitung total setor dan pinjam
-            const totalSetor = transaksi.filter(t => {
-                const jenis = (t.jenis || t.type || '').toUpperCase();
-                return jenis === 'SETOR';
-            }).reduce((sum, t) => sum + (t.nominal || t.amount || 0), 0);
-            
-            const totalPinjam = transaksi.filter(t => {
-                const jenis = (t.jenis || t.type || '').toUpperCase();
-                return jenis === 'PINJAM';
-            }).reduce((sum, t) => sum + (t.nominal || t.amount || 0), 0);
-            
+            const totalSetor = transaksi.filter(t => t.jenis === 'SETOR').reduce((sum, t) => sum + (t.nominal || 0), 0);
+            const totalPinjam = transaksi.filter(t => t.jenis === 'PINJAM').reduce((sum, t) => sum + (t.nominal || 0), 0);
             const saldo = totalSetor - totalPinjam;
-
-            // Hitung statistik transaksi
-            const countSetor = transaksi.filter(t => (t.jenis || t.type || '').toUpperCase() === 'SETOR').length;
-            const countPinjam = transaksi.filter(t => (t.jenis || t.type || '').toUpperCase() === 'PINJAM').length;
-            const countLainnya = transaksi.length - countSetor - countPinjam;
 
             const modal = document.createElement('div'); 
             modal.className = 'modal';
@@ -963,129 +818,61 @@
                         <button onclick="this.closest('.modal').remove()">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <!-- Profile Section -->
                         <div style="text-align: center; margin-bottom: 24px;">
-                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--blue-medium), var(--purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 600; margin: 0 auto 12px; border: 3px solid rgba(255,255,255,0.2);">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--blue-medium), var(--purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 600; margin: 0 auto 12px;">
                                 ${account.nama.charAt(0).toUpperCase()}
                             </div>
                             <h4 style="font-size: 22px; margin-bottom: 6px;">${account.nama}</h4>
-                            <div class="badge ${(account.status || 'aktif').toLowerCase()}" style="font-size: 13px; padding: 6px 16px;">
+                            <div class="badge ${(account.status || 'AKTIF').toLowerCase()}" style="font-size: 13px; padding: 6px 16px;">
                                 ${account.status || 'AKTIF'}
                             </div>
                         </div>
 
-                        <!-- Info Pribadi Card -->
-                        <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 18px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1);">
-                            <h5 style="margin-bottom: 14px; color: var(--text-medium); display: flex; align-items: center; gap: 8px;">
-                                <i class="fas fa-id-card"></i> Informasi Pribadi
-                            </h5>
+                        <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+                            <h5 style="margin-bottom: 14px;"><i class="fas fa-id-card"></i> Informasi</h5>
                             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                                <div>
-                                    <div class="text-dim" style="font-size: 11px;">NRP</div>
-                                    <div style="font-weight: 600;">${account.id || account.nrp || '-'}</div>
-                                </div>
-                                <div>
-                                    <div class="text-dim" style="font-size: 11px;">No HP</div>
-                                    <div>${account.no_hp || '-'}</div>
-                                </div>
-                                <div>
-                                    <div class="text-dim" style="font-size: 11px;">Tempat Lahir</div>
-                                    <div>${account.tempat_lahir || '-'}</div>
-                                </div>
-                                <div>
-                                    <div class="text-dim" style="font-size: 11px;">Tanggal Lahir</div>
-                                    <div>${account.tanggal_lahir || '-'}</div>
-                                </div>
-                                <div style="grid-column: span 2;">
-                                    <div class="text-dim" style="font-size: 11px;">Email</div>
-                                    <div>${account.email || '-'}</div>
-                                </div>
-                                <div style="grid-column: span 2;">
-                                    <div class="text-dim" style="font-size: 11px;">Alamat</div>
-                                    <div>${account.alamat || '-'}</div>
-                                </div>
+                                <div><div class="text-dim">ID</div><div><strong>${account.id}</strong></div></div>
+                                <div><div class="text-dim">No HP</div><div>${account.no_hp || '-'}</div></div>
+                                <div style="grid-column: span 2;"><div class="text-dim">Alamat</div><div>${account.alamat || '-'}</div></div>
                             </div>
                         </div>
 
-                        <!-- Ringkasan Keuangan -->
                         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
-                            <div style="background: rgba(76,175,80,0.15); padding: 14px 8px; border-radius: 12px; text-align: center; border: 1px solid rgba(76,175,80,0.3);">
-                                <div class="text-dim" style="font-size: 10px; margin-bottom: 4px;">SETOR</div>
-                                <div class="positive" style="font-size: 18px; font-weight: 700;">${formatRupiah(totalSetor)}</div>
-                                <div style="font-size: 10px; color: var(--text-dim);">${countSetor} transaksi</div>
+                            <div style="background: rgba(76,175,80,0.15); padding: 12px; border-radius: 12px; text-align: center;">
+                                <div class="text-dim">SETOR</div>
+                                <div class="positive" style="font-size: 18px;">${formatRupiah(totalSetor)}</div>
                             </div>
-                            <div style="background: rgba(245,124,0,0.15); padding: 14px 8px; border-radius: 12px; text-align: center; border: 1px solid rgba(245,124,0,0.3);">
-                                <div class="text-dim" style="font-size: 10px; margin-bottom: 4px;">PINJAM</div>
-                                <div class="neutral" style="font-size: 18px; font-weight: 700;">${formatRupiah(totalPinjam)}</div>
-                                <div style="font-size: 10px; color: var(--text-dim);">${countPinjam} transaksi</div>
+                            <div style="background: rgba(245,124,0,0.15); padding: 12px; border-radius: 12px; text-align: center;">
+                                <div class="text-dim">PINJAM</div>
+                                <div class="neutral" style="font-size: 18px;">${formatRupiah(totalPinjam)}</div>
                             </div>
-                            <div style="background: rgba(255,255,255,0.1); padding: 14px 8px; border-radius: 12px; text-align: center;">
-                                <div class="text-dim" style="font-size: 10px; margin-bottom: 4px;">LAINNYA</div>
-                                <div style="font-size: 18px; font-weight: 700; color: var(--text-dim);">${countLainnya}</div>
-                                <div style="font-size: 10px; color: var(--text-dim);">transaksi</div>
+                            <div style="background: rgba(33,150,243,0.15); padding: 12px; border-radius: 12px; text-align: center;">
+                                <div class="text-dim">SALDO</div>
+                                <div class="${saldo >= 0 ? 'positive' : 'negative'}" style="font-size: 18px;">${formatRupiah(saldo)}</div>
                             </div>
                         </div>
 
-                        <!-- Saldo Akhir Card -->
-                        <div style="background: linear-gradient(135deg, rgba(26,35,126,0.4) 0%, rgba(40,53,147,0.4) 100%); padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.15);">
-                            <div class="flex-between">
-                                <div>
-                                    <div class="text-dim" style="font-size: 12px; margin-bottom: 4px;">Saldo Akhir</div>
-                                    <div style="font-size: 28px; font-weight: 700; color: ${saldo >= 0 ? '#4caf50' : '#f44336'}">
-                                        ${formatRupiah(saldo)}
-                                    </div>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div class="text-dim" style="font-size: 12px;">Total Transaksi</div>
-                                    <div style="font-size: 24px; font-weight: 600;">${transaksi.length}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Riwayat Transaksi dengan Scroll -->
                         <div>
                             <div class="flex-between" style="margin-bottom: 14px;">
-                                <h5 style="color: var(--text-medium); display: flex; align-items: center; gap: 6px;">
-                                    <i class="fas fa-history"></i> Riwayat Transaksi
-                                </h5>
-                                <span style="background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; font-size: 12px;">
-                                    ${transaksi.length} transaksi
-                                </span>
+                                <h5><i class="fas fa-history"></i> Riwayat Transaksi</h5>
+                                <span class="text-dim">${transaksi.length} transaksi</span>
                             </div>
-                            
                             ${transaksi.length === 0 ? 
-                                `<div style="text-align: center; padding: 40px 20px; background: rgba(255,255,255,0.02); border-radius: 12px;">
-                                    <i class="fas fa-exchange-alt" style="font-size: 48px; opacity: 0.2; margin-bottom: 12px;"></i>
-                                    <div class="text-dim">Belum ada transaksi untuk nasabah ini</div>
-                                </div>` : 
-                                `<div style="max-height: 350px; overflow-y: auto; border-radius: 12px; background: rgba(0,0,0,0.3); padding: 4px;">
-                                    ${transaksi.map((t, index) => {
-                                        const nominal = t.nominal || t.amount || 0;
-                                        const jenis = (t.jenis || t.type || '-').toUpperCase();
-                                        const tanggal = t.tanggal || t.date || '-';
-                                        const keterangan = t.keterangan || t.description || '';
-                                        const nominalClass = jenis === 'SETOR' || jenis === 'DONASI' ? 'positive' : 'negative';
-                                        
+                                `<div class="text-center text-dim" style="padding: 30px;">Belum ada transaksi</div>` : 
+                                `<div style="max-height: 350px; overflow-y: auto;">
+                                    ${transaksi.map(t => {
+                                        const nominal = t.nominal || 0;
+                                        const jenis = t.jenis || '-';
+                                        const nominalClass = jenis === 'SETOR' ? 'positive' : 'negative';
+                                        const nominalSign = jenis === 'SETOR' ? '+' : '-';
                                         return `
                                             <div class="transaction-detail-item">
-                                                <div style="flex: 1;">
-                                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                                                        <span class="transaction-type ${jenis.toLowerCase()}">${jenis}</span>
-                                                        <span style="font-size: 11px; color: var(--text-dim);">
-                                                            <i class="fas fa-calendar-alt"></i> ${formatTanggal(tanggal)}
-                                                        </span>
-                                                    </div>
-                                                    ${keterangan ? `
-                                                        <div style="font-size: 11px; color: var(--text-dim); background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 6px; margin-top: 4px;">
-                                                            <i class="fas fa-comment"></i> ${keterangan}
-                                                        </div>
-                                                    ` : ''}
+                                                <div>
+                                                    <span class="transaction-type ${jenis.toLowerCase()}">${jenis}</span>
+                                                    <span class="text-dim" style="margin-left: 8px;">${formatTanggal(t.tanggal)}</span>
+                                                    ${t.keterangan ? `<div class="text-dim" style="font-size: 11px; margin-top: 4px;">${t.keterangan}</div>` : ''}
                                                 </div>
-                                                <div style="margin-left: 12px; text-align: right;">
-                                                    <span class="${nominalClass}" style="font-weight: 700; font-size: 15px; white-space: nowrap;">
-                                                        ${formatNominalWithSign(nominal, jenis)}
-                                                    </span>
-                                                </div>
+                                                <span class="${nominalClass}">${nominalSign} ${formatRupiah(nominal)}</span>
                                             </div>
                                         `;
                                     }).join('')}
@@ -1094,9 +881,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="modal-btn modal-cancel" onclick="this.closest('.modal').remove()">
-                            <i class="fas fa-times"></i> Tutup
-                        </button>
+                        <button class="modal-btn modal-cancel" onclick="this.closest('.modal').remove()">Tutup</button>
                     </div>
                 </div>
             `;
@@ -1108,15 +893,11 @@
             return 'Rp ' + (angka || 0).toLocaleString('id-ID');
         }
         
-        function formatNumber(angka) {
-            return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        }
-
         function formatNominalWithSign(angka, jenis) {
             const jenisUpper = (jenis || '').toUpperCase();
             if (jenisUpper === 'PENGELUARAN' || jenisUpper === 'PINJAM') {
                 return '- ' + formatRupiah(angka);
-            } else if (jenisUpper === 'SETOR' || jenisUpper === 'DONASI') {
+            } else if (jenisUpper === 'SETOR' || jenisUpper === 'DONASI_UANG') {
                 return '+ ' + formatRupiah(angka);
             } else {
                 return formatRupiah(angka);
@@ -1131,10 +912,9 @@
         
         function formatTanggalLengkap(dateStr) {
             if (!dateStr) return '-';
-            const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
             const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
             const d = new Date(dateStr);
-            return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+            return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
         }
         
         function showToast(msg, isError = false) {
@@ -1142,27 +922,7 @@
             t.className = 'toast' + (isError ? ' error' : '');
             t.innerHTML = `<i class="fas fa-${isError ? 'exclamation-circle' : 'check-circle'}"></i> ${msg}`;
             document.body.appendChild(t);
-            setTimeout(() => { 
-                t.style.opacity = '0'; 
-                t.style.transform = 'translateX(100%)'; 
-                setTimeout(() => t.remove(), 300); 
-            }, 3000);
-        }
-    </script>
-    
-    <!-- Service Worker for PWA -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(
-                    function(registration) {
-                        console.log('✅ Service Worker registered with scope:', registration.scope);
-                    },
-                    function(err) {
-                        console.log('❌ Service Worker registration failed:', err);
-                    }
-                );
-            });
+            setTimeout(() => { t.remove(); }, 3000);
         }
     </script>
 </body>
