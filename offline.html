@@ -2,12 +2,20 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Offline - Kas Pura</title>
+    <meta name="theme-color" content="#1a237e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kas Pura">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a192f;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0a192f 0%, #0d2b3e 100%);
             color: white;
             display: flex;
             align-items: center;
@@ -17,45 +25,426 @@
             padding: 20px;
             text-align: center;
         }
+        
         .offline-container {
-            max-width: 400px;
+            max-width: 380px;
+            width: 100%;
+            background: rgba(25, 35, 45, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 40px 28px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.5s ease;
         }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .icon-wrapper {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.2), rgba(255, 152, 0, 0.05));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            border: 2px solid rgba(255, 152, 0, 0.3);
+        }
+        
         .icon {
-            font-size: 80px;
+            font-size: 48px;
             color: #ff9800;
-            margin-bottom: 20px;
+            animation: pulse 2s infinite;
         }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
         h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff9800, #ffb74d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 12px;
+        }
+        
+        .subtitle {
+            font-size: 14px;
             color: #ff9800;
-            margin-bottom: 10px;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
         }
+        
         p {
-            color: #90a4ae;
+            color: rgba(255, 255, 255, 0.7);
             line-height: 1.6;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
+            font-size: 15px;
         }
+        
+        .info-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 28px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-item i {
+            width: 24px;
+            color: #ff9800;
+            font-size: 16px;
+        }
+        
+        .info-item span {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        
         .btn {
-            background: #1a237e;
+            background: linear-gradient(135deg, #1a237e, #283593);
             color: white;
             border: none;
             padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
         }
-        .btn:hover {
-            background: #283593;
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 152, 0, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background: rgba(244, 67, 54, 0.2);
+            color: #ef5350;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .cached-data {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 8px;
+        }
+        
+        .cached-data p {
+            font-size: 12px;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .data-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 12px;
+        }
+        
+        .data-stats span {
+            color: #ff9800;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 480px) {
+            .offline-container {
+                padding: 30px 20px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                justify-content: center;
+            }
+            h1 {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="offline-container">
-        <div class="icon">📡</div>
-        <h1>Anda Sedang Offline</h1>
-        <p>Koneksi internet terputus. Aplikasi akan menampilkan data terakhir yang tersimpan. Silakan coba lagi saat koneksi pulih.</p>
-        <button class="btn" onclick="window.location.reload()">🔄 Coba Lagi</button>
+        <div class="icon-wrapper">
+            <i class="fas fa-wifi icon"></i>
+        </div>
+        
+        <div class="status-badge">
+            <i class="fas fa-plug"></i> Koneksi Terputus
+        </div>
+        
+        <h1>Mode Offline</h1>
+        <div class="subtitle">Aplikasi Kas Pura</div>
+        
+        <p>Koneksi internet tidak tersedia. Anda masih dapat mengakses data yang sudah tersimpan secara lokal.</p>
+        
+        <div class="info-box">
+            <div class="info-item">
+                <i class="fas fa-database"></i>
+                <span>Data tersimpan di perangkat Anda</span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-sync-alt"></i>
+                <span>Akan sinkron otomatis saat online</span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-mobile-alt"></i>
+                <span>Aplikasi dapat digunakan tanpa internet</span>
+            </div>
+        </div>
+        
+        <div class="cached-data" id="cachedData">
+            <p><i class="fas fa-chart-line"></i> Data yang tersimpan:</p>
+            <div class="data-stats">
+                <div><i class="fas fa-users"></i> <span id="cachedAnggota">-</span> Anggota</div>
+                <div><i class="fas fa-hand-holding-heart"></i> <span id="cachedDonatur">-</span> Donatur</div>
+                <div><i class="fas fa-exchange-alt"></i> <span id="cachedTransaksi">-</span> Transaksi</div>
+            </div>
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="tryReconnect()">
+                <i class="fas fa-sync-alt"></i> Coba Lagi
+            </button>
+            <button class="btn btn-secondary" onclick="goToApp()">
+                <i class="fas fa-home"></i> Buka Aplikasi
+            </button>
+        </div>
+        
+        <p style="font-size: 11px; margin-bottom: 0;">
+            <i class="fas fa-clock"></i> Terakhir online: <span id="lastSync">-</span>
+        </p>
     </div>
+
+    <script>
+        // ==================== KONFIGURASI ====================
+        const DB_NAME = 'KasAppDB';
+        const STORES = { ANGGOTA: 'anggota', DONATUR: 'donatur', TRANSAKSI: 'transaksi' };
+        
+        let db = null;
+        
+        // ==================== INDEXEDDB FUNCTIONS ====================
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, 3);
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(STORES.ANGGOTA)) {
+                        db.createObjectStore(STORES.ANGGOTA, { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains(STORES.DONATUR)) {
+                        db.createObjectStore(STORES.DONATUR, { keyPath: 'nama' });
+                    }
+                    if (!db.objectStoreNames.contains(STORES.TRANSAKSI)) {
+                        db.createObjectStore(STORES.TRANSAKSI, { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('last_sync')) {
+                        db.createObjectStore('last_sync', { keyPath: 'type' });
+                    }
+                };
+            });
+        }
+        
+        async function getAllFromStore(storeName) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readonly');
+                const store = transaction.objectStore(storeName);
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result || []);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        
+        async function getLastSync() {
+            return new Promise((resolve, reject) => {
+                if (!db) {
+                    resolve(null);
+                    return;
+                }
+                const transaction = db.transaction(['last_sync'], 'readonly');
+                const store = transaction.objectStore('last_sync');
+                const request = store.get('full');
+                request.onsuccess = () => resolve(request.result?.timestamp || null);
+                request.onerror = () => resolve(null);
+            });
+        }
+        
+        async function loadCachedStats() {
+            try {
+                await openDB();
+                const anggota = await getAllFromStore(STORES.ANGGOTA);
+                const donatur = await getAllFromStore(STORES.DONATUR);
+                const transaksi = await getAllFromStore(STORES.TRANSAKSI);
+                const lastSync = await getLastSync();
+                
+                document.getElementById('cachedAnggota').textContent = anggota.length;
+                document.getElementById('cachedDonatur').textContent = donatur.length;
+                document.getElementById('cachedTransaksi').textContent = transaksi.length;
+                
+                if (lastSync) {
+                    const date = new Date(lastSync);
+                    document.getElementById('lastSync').textContent = date.toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                } else {
+                    document.getElementById('lastSync').textContent = 'Belum pernah sinkron';
+                }
+            } catch (error) {
+                console.error('Error loading cached stats:', error);
+                document.getElementById('cachedAnggota').textContent = '0';
+                document.getElementById('cachedDonatur').textContent = '0';
+                document.getElementById('cachedTransaksi').textContent = '0';
+            }
+        }
+        
+        // ==================== FUNGSI NAVIGASI ====================
+        function tryReconnect() {
+            if (navigator.onLine) {
+                window.location.href = '/';
+            } else {
+                // Cek koneksi dengan fetch
+                fetch('/')
+                    .then(() => {
+                        window.location.href = '/';
+                    })
+                    .catch(() => {
+                        // Tetap offline, refresh halaman offline
+                        window.location.reload();
+                    });
+            }
+        }
+        
+        function goToApp() {
+            // Coba akses halaman utama
+            if (navigator.onLine) {
+                window.location.href = '/';
+            } else {
+                // Tampilkan pesan bahwa masih offline
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: rgba(0,0,0,0.9);
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 30px;
+                    font-size: 14px;
+                    z-index: 2000;
+                    backdrop-filter: blur(10px);
+                    animation: fadeInUp 0.3s ease;
+                `;
+                toast.innerHTML = '<i class="fas fa-wifi"></i> Masih offline, coba lagi nanti';
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+        }
+        
+        // ==================== MONITOR KONEKSI ====================
+        function initNetworkMonitor() {
+            window.addEventListener('online', () => {
+                // Redirect ke halaman utama saat koneksi pulih
+                window.location.href = '/';
+            });
+        }
+        
+        // ==================== CEK KONEKSI AWAL ====================
+        function checkInitialConnection() {
+            if (navigator.onLine) {
+                // Coba fetch ke halaman utama
+                fetch('/')
+                    .then(() => {
+                        window.location.href = '/';
+                    })
+                    .catch(() => {
+                        // Gagal fetch, tetap di halaman offline
+                        console.log('Server tidak merespon');
+                    });
+            }
+        }
+        
+        // ==================== INIT ====================
+        (async function init() {
+            await loadCachedStats();
+            initNetworkMonitor();
+            // Cek koneksi setelah 2 detik
+            setTimeout(checkInitialConnection, 2000);
+        })();
+    </script>
 </body>
 </html>
