@@ -40,7 +40,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: var(--blue-dark);
+            background: linear-gradient(135deg, #0a192f 0%, #0d2b3e 100%);
             color: var(--text-light);
             min-height: 100vh;
             line-height: 1.5;
@@ -50,7 +50,7 @@
             position: fixed;
             top: 0; left: 0; right: 0;
             height: 56px;
-            background: var(--blue-medium);
+            background: linear-gradient(135deg, #1a237e, #283593);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -59,7 +59,7 @@
             border-bottom: 1px solid var(--border-light);
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
-        .header h1 { font-size: 18px; font-weight: 600; }
+        .header h1 { font-size: 16px; font-weight: 600; }
         .header-actions { display: flex; gap: 12px; }
         .header-btn {
             background: rgba(255,255,255,0.1);
@@ -96,7 +96,7 @@
         .nav {
             position: fixed;
             bottom: 0; left: 0; right: 0;
-            background: var(--blue-medium);
+            background: linear-gradient(135deg, #1a237e, #283593);
             display: flex;
             border-top: 1px solid var(--border-light);
             height: 56px;
@@ -131,8 +131,8 @@
             border: 1px solid rgba(255,255,255,0.15);
             box-shadow: var(--shadow);
         }
-        .info-label { font-size: 13px; color: var(--text-medium); margin-bottom: 6px; text-transform: uppercase; }
-        .info-value { font-size: 34px; font-weight: 700; color: #00e676; }
+        .info-label { font-size: 13px; color: var(--text-medium); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+        .info-value { font-size: 32px; font-weight: 700; color: #00e676; }
 
         .stats-grid {
             display: grid;
@@ -152,8 +152,8 @@
         .stat-card.pinjam { border-left-color: var(--orange); }
         .stat-card.donatur { border-left-color: var(--yellow); }
         .stat-label { font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
-        .stat-value { font-size: 20px; font-weight: 700; }
-        .stat-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+        .stat-value { font-size: 18px; font-weight: 700; }
+        .stat-sub { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
 
         .stats-grid-3 {
             display: grid;
@@ -164,13 +164,15 @@
         .stat-card-3 {
             background: rgba(255,255,255,0.05);
             border-radius: 12px;
-            padding: 16px;
+            padding: 14px;
             border-left: 4px solid;
+            text-align: center;
         }
-        .stat-card-3.saldo { border-left-color: var(--green-light); }
         .stat-card-3.setor { border-left-color: var(--green-light); }
-        .stat-card-3.pengeluaran { border-left-color: var(--purple); }
         .stat-card-3.pinjam { border-left-color: var(--orange); }
+        .stat-card-3.pengeluaran { border-left-color: var(--purple); }
+        .stat-card-3 .stat-label { font-size: 11px; }
+        .stat-card-3 .stat-value { font-size: 16px; }
 
         .transaction-list {
             max-height: 500px;
@@ -190,7 +192,8 @@
             font-weight: 600;
             padding: 4px 10px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
+            display: inline-block;
         }
         .transaction-type.setor { background: rgba(76,175,80,0.2); color: #81c784; }
         .transaction-type.pengeluaran { background: rgba(198,40,40,0.2); color: #ef5350; }
@@ -219,7 +222,7 @@
         .account-avatar {
             width: 42px;
             height: 42px;
-            background: var(--blue-medium);
+            background: linear-gradient(135deg, #1a237e, #283593);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -244,7 +247,7 @@
             padding: 14px 12px 14px 40px;
             background: rgba(255,255,255,0.1);
             border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
+            border-radius: 12px;
             color: white;
             font-size: 15px;
             transition: all 0.2s;
@@ -264,23 +267,22 @@
         }
         .badge.aktif { background: rgba(76,175,80,0.2); color: #81c784; }
         .badge.nonaktif { background: rgba(198,40,40,0.2); color: #ef5350; }
-        .badge.keluar { background: rgba(158,158,158,0.2); color: #e0e0e0; }
 
         .modal {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
             padding: 16px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
         .modal-content {
             background: var(--bg-card);
-            border-radius: 16px;
-            max-width: 600px;
+            border-radius: 20px;
+            max-width: 550px;
             width: 100%;
             max-height: 90vh;
             display: flex;
@@ -289,16 +291,16 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .modal-header {
-            padding: 18px;
+            padding: 18px 20px;
             border-bottom: 1px solid rgba(255,255,255,0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--bg-card);
-            border-radius: 16px 16px 0 0;
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px 20px 0 0;
             flex-shrink: 0;
         }
-        .modal-header h3 { font-size: 18px; }
+        .modal-header h3 { font-size: 18px; font-weight: 600; }
         .modal-header button {
             background: none;
             border: none;
@@ -311,6 +313,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            transition: all 0.2s;
         }
         .modal-header button:hover {
             background: rgba(255,255,255,0.1);
@@ -321,23 +324,23 @@
             flex: 1;
         }
         .modal-footer {
-            padding: 18px;
+            padding: 16px 20px;
             border-top: 1px solid rgba(255,255,255,0.2);
-            background: var(--bg-card);
-            border-radius: 0 0 16px 16px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 0 0 20px 20px;
             flex-shrink: 0;
         }
         .modal-btn {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
         }
         .modal-cancel { background: rgba(255,255,255,0.1); color: var(--text-light); }
-        .modal-cancel:hover { background: rgba(255,255,255,0.15); }
+        .modal-cancel:hover { background: rgba(255,255,255,0.2); }
 
         .transaction-detail-item {
             padding: 12px;
@@ -357,15 +360,16 @@
             right: 16px;
             background: var(--green-dark);
             color: white;
-            padding: 14px 18px;
-            border-radius: 8px;
+            padding: 12px 18px;
+            border-radius: 12px;
             z-index: 2000;
             animation: slideIn 0.3s ease;
             display: flex;
             align-items: center;
             gap: 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            max-width: 350px;
+            max-width: 320px;
+            font-size: 14px;
         }
         .toast.error { background: var(--red); }
         .toast.warning { background: var(--orange); }
@@ -381,6 +385,30 @@
         .positive { color: #4caf50; }
         .negative { color: #f44336; }
         .neutral { color: #ff9800; }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 13px; }
+            .info-value { font-size: 26px; }
+            .stat-value { font-size: 15px; }
+            .stat-card-3 .stat-value { font-size: 14px; }
+            .card { padding: 16px; }
+        }
+
+        @media print {
+            .header, .nav, .header-actions, .modal { display: none !important; }
+            .content { padding: 20px; }
+            .card { background: white; color: black; border: 1px solid #ddd; }
+            .info-card { background: #f5f5f5; color: black; }
+            .positive { color: #2e7d32; }
+            .negative { color: #c62828; }
+            body { background: white; }
+        }
     </style>
 </head>
 <body>
@@ -411,7 +439,6 @@
 
     <script>
         // ==================== KONFIGURASI BACKEND ====================
-        // GANTI DENGAN URL DEPLOY ANDA YANG BARU
         const API_URL = 'https://script.google.com/macros/s/AKfycbxvNHoOFisWOYzW__JLy7WA_1BKEB4Hs3GG3v0SlgiGDfdrozLHprKGSXAV39P8yHzNSg/exec';
         const API_TOKEN = 'kas2026';
 
@@ -426,7 +453,8 @@
                 totalSetor: 0, totalPengeluaran: 0, totalPinjam: 0, totalDonasi: 0,
                 countSetor: 0, countPengeluaran: 0, countPinjam: 0, countDonasi: 0
             },
-            searchQuery: ''
+            searchQuery: '',
+            isLoading: false
         };
 
         // ==================== INISIALISASI ====================
@@ -454,6 +482,9 @@
 
         // ==================== LOAD DATA ====================
         async function loadData() {
+            if (state.isLoading) return;
+            state.isLoading = true;
+            
             try {
                 showToast('Memuat data...');
                 
@@ -491,6 +522,8 @@
             } catch (error) {
                 console.error('Error loading data:', error);
                 showToast('Gagal memuat data: ' + error.message, true);
+            } finally {
+                state.isLoading = false;
             }
         }
 
@@ -538,7 +571,7 @@
             renderTab();
         }
 
-        // ==================== DASHBOARD ====================
+        // ==================== DASHBOARD (Tanpa Tombol Setor/Pinjam & Donasi) ====================
         function renderDashboard() {
             const totalPemasukan = state.stats.totalSetor + state.stats.totalDonasi;
             const totalPengeluaran = state.stats.totalPengeluaran + state.stats.totalPinjam;
@@ -597,11 +630,11 @@
                         </div>
                     ` : ''}
 
-                    <h4 style="margin: 20px 0 12px;">Semua Transaksi</h4>
+                    <h4 style="margin: 20px 0 12px;"><i class="fas fa-list"></i> Semua Transaksi</h4>
                     <div class="transaction-list">
                         ${state.transactions.length === 0 ? 
-                            '<div class="text-dim text-center" style="padding: 20px;">Belum ada transaksi</div>' : 
-                            state.transactions.slice(0, 50).map(t => {
+                            '<div class="text-dim text-center" style="padding: 30px;"><i class="fas fa-inbox"></i> Belum ada transaksi</div>' : 
+                            state.transactions.slice(0, 100).map(t => {
                                 const jenis = (t.jenis || '-').toUpperCase();
                                 const nominal = t.nominal || 0;
                                 const nama = t.nama || t.id_anggota || '-';
@@ -613,20 +646,20 @@
                                     <div class="transaction-item">
                                         <div>
                                             <span class="transaction-type ${displayJenis.toLowerCase()}">${displayJenis}</span>
-                                            <span style="font-size: 12px; color: var(--text-dim); margin-left: 8px;">
-                                                ${formatTanggal(tanggal)}
+                                            <span style="font-size: 11px; color: var(--text-dim); margin-left: 8px;">
+                                                <i class="fas fa-calendar-alt"></i> ${formatTanggal(tanggal)}
                                             </span>
                                             <div style="font-size: 12px; margin-top: 4px; color: var(--text-medium);">
-                                                ${nama}
-                                                ${t.nama_barang ? `<span class="text-dim"> - <i class="fas fa-box"></i> ${t.nama_barang}</span>` : ''}
+                                                <i class="fas fa-user"></i> ${escapeHtml(nama)}
+                                                ${t.nama_barang ? `<span class="text-dim"> - <i class="fas fa-box"></i> ${escapeHtml(t.nama_barang)}</span>` : ''}
                                             </div>
                                         </div>
-                                        <span class="${nominalClass}">${formatNominalWithSign(nominal, jenis)}</span>
+                                        <span class="${nominalClass}" style="font-weight: 600;">${formatNominalWithSign(nominal, jenis)}</span>
                                     </div>
                                 `;
                             }).join('')
                         }
-                        ${state.transactions.length > 50 ? '<div class="text-dim text-center" style="padding: 10px;">Menampilkan 50 transaksi terbaru</div>' : ''}
+                        ${state.transactions.length > 100 ? '<div class="text-dim text-center" style="padding: 12px;">Menampilkan 100 transaksi terbaru</div>' : ''}
                     </div>
                 </div>
             `;
@@ -643,6 +676,7 @@
 <html>
 <head>
     <title>Laporan Kas Pura - Koramil Sukasada</title>
+    <meta charset="UTF-8">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -677,13 +711,12 @@
         .summary-item.total { border-top: 2px solid #000; border-bottom: none; margin-top: 10px; padding-top: 10px; font-weight: bold; grid-column: span 2; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 10pt; }
         th { background: #1a237e; color: white; padding: 8px; text-align: center; border: 1px solid #333; }
-        td { padding: 6px; border: 1px solid #333; }
+        td { padding: 6px; border: 1px solid #333; vertical-align: top; }
         .text-right { text-align: right; }
         .text-center { text-align: center; }
         .positive { color: #006600; font-weight: bold; }
         .negative { color: #cc0000; font-weight: bold; }
         .footer { margin-top: 50px; text-align: right; }
-        .signature-line { margin-top: 40px; border-top: 1px solid #000; width: 200px; display: inline-block; padding-top: 5px; }
     </style>
 </head>
 <body>
@@ -728,7 +761,7 @@
                 const nominalClass = jenis === 'SETOR' || jenis === 'DONASI_UANG' ? 'positive' : 'negative';
                 const nominalDisplay = nominalClass === 'positive' ? formatRupiah(nominal) : '(' + formatRupiah(nominal) + ')';
                 const displayJenis = jenis === 'DONASI_UANG' ? 'DONASI' : jenis;
-                return `<tr><td class="text-center">${index + 1}</td><td class="text-center">${tanggal}</td><td class="text-center">${displayJenis}</td><td>${nama}</td><td class="text-right ${nominalClass}">${nominalDisplay}</td><td>${keterangan}</td></tr>`;
+                return `<tr><td class="text-center">${index + 1}</td><td class="text-center">${tanggal}</td><td class="text-center">${displayJenis}</td><td>${escapeHtml(nama)}</td><td class="text-right ${nominalClass}">${nominalDisplay}</td><td>${escapeHtml(keterangan)}</td></tr>`;
             }).join('')}
         </tbody>
     </table>
@@ -758,7 +791,7 @@
 
             return `
                 <div class="card">
-                    <h3 style="margin-bottom: 16px;"><i class="fas fa-users"></i> Daftar Rekening</h3>
+                    <h3 style="margin-bottom: 16px;"><i class="fas fa-users"></i> Daftar Rekening Nasabah</h3>
 
                     <div class="search-box">
                         <i class="fas fa-search"></i>
@@ -768,14 +801,14 @@
 
                     <div class="account-list">
                         ${filteredAccounts.length === 0 ? 
-                            '<div class="text-dim text-center" style="padding: 30px;">Belum ada nasabah</div>' : 
+                            '<div class="text-dim text-center" style="padding: 40px;"><i class="fas fa-user-slash"></i> Nasabah tidak ditemukan</div>' : 
                             filteredAccounts.map(acc => {
                                 const id = acc.id || '-';
                                 return `
                                     <div class="account-item" onclick="viewAccountDetail('${id}')">
                                         <div class="account-avatar">${acc.nama.charAt(0).toUpperCase()}</div>
                                         <div style="flex: 1;">
-                                            <div style="font-weight: 600;">${acc.nama}</div>
+                                            <div style="font-weight: 600;">${escapeHtml(acc.nama)}</div>
                                             <div class="flex-between">
                                                 <span class="text-dim" style="font-size: 12px;">ID: ${id}</span>
                                                 <span class="badge ${(acc.status || 'AKTIF').toLowerCase()}">${acc.status || 'AKTIF'}</span>
@@ -818,49 +851,49 @@
                         <button onclick="this.closest('.modal').remove()">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <div style="text-align: center; margin-bottom: 24px;">
-                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--blue-medium), var(--purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 600; margin: 0 auto 12px;">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #1a237e, #283593); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 600; margin: 0 auto 12px;">
                                 ${account.nama.charAt(0).toUpperCase()}
                             </div>
-                            <h4 style="font-size: 22px; margin-bottom: 6px;">${account.nama}</h4>
-                            <div class="badge ${(account.status || 'AKTIF').toLowerCase()}" style="font-size: 13px; padding: 6px 16px;">
+                            <h4 style="font-size: 20px; margin-bottom: 6px;">${escapeHtml(account.nama)}</h4>
+                            <div class="badge ${(account.status || 'AKTIF').toLowerCase()}" style="font-size: 12px; padding: 4px 12px;">
                                 ${account.status || 'AKTIF'}
                             </div>
                         </div>
 
-                        <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
-                            <h5 style="margin-bottom: 14px;"><i class="fas fa-id-card"></i> Informasi</h5>
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                                <div><div class="text-dim">ID</div><div><strong>${account.id}</strong></div></div>
-                                <div><div class="text-dim">No HP</div><div>${account.no_hp || '-'}</div></div>
-                                <div style="grid-column: span 2;"><div class="text-dim">Alamat</div><div>${account.alamat || '-'}</div></div>
+                        <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+                            <h5 style="margin-bottom: 12px;"><i class="fas fa-id-card"></i> Informasi</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <div><div class="text-dim" style="font-size: 11px;">ID</div><div><strong>${account.id}</strong></div></div>
+                                <div><div class="text-dim" style="font-size: 11px;">No HP</div><div>${account.no_hp || '-'}</div></div>
+                                <div style="grid-column: span 2;"><div class="text-dim" style="font-size: 11px;">Alamat</div><div>${account.alamat || '-'}</div></div>
                             </div>
                         </div>
 
                         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
                             <div style="background: rgba(76,175,80,0.15); padding: 12px; border-radius: 12px; text-align: center;">
-                                <div class="text-dim">SETOR</div>
-                                <div class="positive" style="font-size: 18px;">${formatRupiah(totalSetor)}</div>
+                                <div class="text-dim" style="font-size: 11px;">SETOR</div>
+                                <div class="positive" style="font-size: 16px; font-weight: 700;">${formatRupiah(totalSetor)}</div>
                             </div>
                             <div style="background: rgba(245,124,0,0.15); padding: 12px; border-radius: 12px; text-align: center;">
-                                <div class="text-dim">PINJAM</div>
-                                <div class="neutral" style="font-size: 18px;">${formatRupiah(totalPinjam)}</div>
+                                <div class="text-dim" style="font-size: 11px;">PINJAM</div>
+                                <div class="neutral" style="font-size: 16px; font-weight: 700;">${formatRupiah(totalPinjam)}</div>
                             </div>
                             <div style="background: rgba(33,150,243,0.15); padding: 12px; border-radius: 12px; text-align: center;">
-                                <div class="text-dim">SALDO</div>
-                                <div class="${saldo >= 0 ? 'positive' : 'negative'}" style="font-size: 18px;">${formatRupiah(saldo)}</div>
+                                <div class="text-dim" style="font-size: 11px;">SALDO</div>
+                                <div class="${saldo >= 0 ? 'positive' : 'negative'}" style="font-size: 16px; font-weight: 700;">${formatRupiah(saldo)}</div>
                             </div>
                         </div>
 
                         <div>
-                            <div class="flex-between" style="margin-bottom: 14px;">
-                                <h5><i class="fas fa-history"></i> Riwayat Transaksi</h5>
-                                <span class="text-dim">${transaksi.length} transaksi</span>
+                            <div class="flex-between" style="margin-bottom: 12px;">
+                                <h5 style="font-size: 14px;"><i class="fas fa-history"></i> Riwayat Transaksi</h5>
+                                <span class="text-dim" style="font-size: 12px;">${transaksi.length} transaksi</span>
                             </div>
                             ${transaksi.length === 0 ? 
-                                `<div class="text-center text-dim" style="padding: 30px;">Belum ada transaksi</div>` : 
+                                `<div class="text-center text-dim" style="padding: 30px;"><i class="fas fa-inbox"></i> Belum ada transaksi</div>` : 
                                 `<div style="max-height: 350px; overflow-y: auto;">
-                                    ${transaksi.map(t => {
+                                    ${transaksi.slice(0, 50).map(t => {
                                         const nominal = t.nominal || 0;
                                         const jenis = t.jenis || '-';
                                         const nominalClass = jenis === 'SETOR' ? 'positive' : 'negative';
@@ -869,19 +902,21 @@
                                             <div class="transaction-detail-item">
                                                 <div>
                                                     <span class="transaction-type ${jenis.toLowerCase()}">${jenis}</span>
-                                                    <span class="text-dim" style="margin-left: 8px;">${formatTanggal(t.tanggal)}</span>
-                                                    ${t.keterangan ? `<div class="text-dim" style="font-size: 11px; margin-top: 4px;">${t.keterangan}</div>` : ''}
+                                                    <span class="text-dim" style="margin-left: 8px; font-size: 11px;">${formatTanggal(t.tanggal)}</span>
+                                                    ${t.keterangan ? `<div class="text-dim" style="font-size: 11px; margin-top: 4px;">${escapeHtml(t.keterangan)}</div>` : ''}
+                                                    ${t.nama_barang ? `<div class="text-dim" style="font-size: 11px;"><i class="fas fa-box"></i> ${escapeHtml(t.nama_barang)}</div>` : ''}
                                                 </div>
-                                                <span class="${nominalClass}">${nominalSign} ${formatRupiah(nominal)}</span>
+                                                <span class="${nominalClass}" style="font-weight: 600;">${nominalSign} ${formatRupiah(nominal)}</span>
                                             </div>
                                         `;
                                     }).join('')}
+                                    ${transaksi.length > 50 ? '<div class="text-dim text-center" style="padding: 8px;">Menampilkan 50 transaksi terbaru</div>' : ''}
                                 </div>`
                             }
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="modal-btn modal-cancel" onclick="this.closest('.modal').remove()">Tutup</button>
+                        <button class="modal-btn modal-cancel" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i> Tutup</button>
                     </div>
                 </div>
             `;
@@ -906,15 +941,35 @@
         
         function formatTanggal(dateStr) {
             if (!dateStr) return '-';
-            const d = new Date(dateStr);
-            return d.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            try {
+                const d = new Date(dateStr);
+                if (isNaN(d.getTime())) return '-';
+                return d.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            } catch {
+                return '-';
+            }
         }
         
         function formatTanggalLengkap(dateStr) {
             if (!dateStr) return '-';
-            const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-            const d = new Date(dateStr);
-            return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+            try {
+                const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                const d = new Date(dateStr);
+                if (isNaN(d.getTime())) return '-';
+                return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+            } catch {
+                return '-';
+            }
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
         }
         
         function showToast(msg, isError = false) {
@@ -922,7 +977,10 @@
             t.className = 'toast' + (isError ? ' error' : '');
             t.innerHTML = `<i class="fas fa-${isError ? 'exclamation-circle' : 'check-circle'}"></i> ${msg}`;
             document.body.appendChild(t);
-            setTimeout(() => { t.remove(); }, 3000);
+            setTimeout(() => {
+                t.style.opacity = '0';
+                setTimeout(() => t.remove(), 300);
+            }, 3000);
         }
     </script>
 </body>
