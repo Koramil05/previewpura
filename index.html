@@ -180,7 +180,6 @@
         .empty-state { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.5); }
         .empty-state i { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
         
-        /* Modal untuk detail (read-only) */
         .modal {
             position: fixed;
             top: 0;
@@ -464,6 +463,32 @@
             } else {
                 dot.classList.add('offline');
                 textEl.textContent = text || 'Offline';
+            }
+        }
+
+        // ==================== FUNGSI FORMAT TANGGAL YANG DIPERBAIKI ====================
+        function formatTanggal(dateStr) {
+            if (!dateStr) return '-';
+            try {
+                let date;
+                if (typeof dateStr === 'string' && dateStr.includes('T')) {
+                    date = new Date(dateStr);
+                } else {
+                    date = new Date(dateStr);
+                }
+                if (isNaN(date.getTime())) {
+                    const parts = dateStr.split('-');
+                    if (parts.length === 3) {
+                        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+                    }
+                    return dateStr.split('T')[0] || '-';
+                }
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+            } catch (e) {
+                return '-';
             }
         }
 
@@ -781,6 +806,7 @@
             document.body.appendChild(modal);
         };
 
+        // ==================== FUNGSI CETAK LAPORAN YANG DIPERBAIKI ====================
         window.cetakLaporanLengkap = async function() {
             const anggota = await getAllFromStore(STORES.ANGGOTA);
             const donatur = await getAllFromStore(STORES.DONATUR);
@@ -789,8 +815,72 @@
             const totalMasuk = transaksi.filter(t => t.jenis === 'SETOR' || t.jenis === 'DONASI_UANG').reduce((s,t) => s + t.nominal, 0);
             const totalKeluar = transaksi.filter(t => t.jenis === 'PINJAM' || t.jenis === 'PENGELUARAN').reduce((s,t) => s + t.nominal, 0);
             
+            const formatTanggalCetak = (dateStr) => {
+                if (!dateStr) return '-';
+                try {
+                    let date;
+                    if (typeof dateStr === 'string' && dateStr.includes('T')) {
+                        date = new Date(dateStr);
+                    } else {
+                        date = new Date(dateStr);
+                    }
+                    if (isNaN(date.getTime())) {
+                        const parts = dateStr.split('-');
+                        if (parts.length === 3) {
+                            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+                        }
+                        return dateStr.split('T')[0] || '-';
+                    }
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
+                } catch (e) {
+                    return '-';
+                }
+            };
+            
             const printWindow = window.open('', '_blank');
-            printWindow.document.write(`<!DOCTYPE html><html><head><title>Laporan Kas Pura</title><meta charset="UTF-8"><style>body{font-family:'Times New Roman',serif;padding:30px}.header{text-align:center;border-bottom:2px solid #1a237e;padding-bottom:20px;margin-bottom:30px}h1{color:#1a237e}table{width:100%;border-collapse:collapse;margin:20px 0}th{background:#1a237e;color:white;padding:10px}td{padding:8px;border-bottom:1px solid #ddd}.text-right{text-align:right}.positive{color:#2e7d32}.negative{color:#c62828}.footer{margin-top:40px;text-align:center}</style></head><body><div class="header"><h1>LAPORAN KAS PURA</h1><p>Koramil Sukasada</p><p>Dicetak: ${new Date().toLocaleDateString('id-ID')}</p></div><div class="summary"><h3>Ringkasan</h3><p>Saldo Kas: ${formatRupiah(saldo)}</p><p>Total Pemasukan: ${formatRupiah(totalMasuk)}</p><p>Total Pengeluaran: ${formatRupiah(totalKeluar)}</p><p>Total Anggota: ${anggota.length}</p><p>Total Donatur: ${donatur.length}</p></div><h3>Daftar Transaksi</h3>${transaksi.length===0?'<p>Belum ada transaksi</p>':`<table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Nama</th><th>Nominal</th></tr></thead><tbody>${transaksi.sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal)).map(t=>`<tr><td>${t.tanggal}</td><td>${t.jenis}</td><td>${t.nama||t.id_anggota||'-'}</td><td class="text-right">${formatRupiah(t.nominal)}</td></tr>`).join('')}</tbody></table>`}<div class="footer"><p>Dicetak dari Aplikasi Kas Pura</p></div></body></html>`);
+            printWindow.document.write(`<!DOCTYPE html><html><head><title>Laporan Kas Pura</title><meta charset="UTF-8"><style>
+                body{font-family:'Times New Roman',serif;padding:30px}
+                .header{text-align:center;border-bottom:2px solid #1a237e;padding-bottom:20px;margin-bottom:30px}
+                h1{color:#1a237e}
+                .summary{margin-bottom:30px}
+                .summary p{margin:5px 0}
+                table{width:100%;border-collapse:collapse;margin:20px 0}
+                th{background:#1a237e;color:white;padding:10px;text-align:left}
+                td{padding:8px;border-bottom:1px solid #ddd}
+                .text-right{text-align:right}
+                .positive{color:#2e7d32}
+                .negative{color:#c62828}
+                .footer{margin-top:40px;text-align:center}
+                @media print { body{padding:0} }
+            </style></head><body>
+            <div class="header">
+                <h1>LAPORAN KAS PURA</h1>
+                <p>Koramil Sukasada</p>
+                <p>Dicetak: ${new Date().toLocaleDateString('id-ID')}</p>
+            </div>
+            <div class="summary">
+                <h3>Ringkasan</h3>
+                <p>Saldo Kas: ${formatRupiah(saldo)}</p>
+                <p>Total Pemasukan: ${formatRupiah(totalMasuk)}</p>
+                <p>Total Pengeluaran: ${formatRupiah(totalKeluar)}</p>
+                <p>Total Anggota: ${anggota.length}</p>
+                <p>Total Donatur: ${donatur.length}</p>
+            </div>
+            <h3>Daftar Transaksi</h3>
+            ${transaksi.length===0?'<p>Belum ada transaksi</p>':`<table>
+                <thead><tr><th>Tanggal</th><th>Jenis</th><th>Nama</th><th class="text-right">Nominal</th></tr></thead>
+                <tbody>${transaksi.sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal)).map(t=>`<tr>
+                    <td>${formatTanggalCetak(t.tanggal)}</td>
+                    <td>${t.jenis === 'DONASI_UANG' ? 'DONASI' : (t.jenis === 'DONASI_BARANG' ? 'DONASI BARANG' : t.jenis)}</td>
+                    <td>${t.nama||t.id_anggota||'-'}</td>
+                    <td class="text-right ${t.jenis === 'SETOR' || t.jenis === 'DONASI_UANG' ? 'positive' : 'negative'}">${formatRupiah(t.nominal)}</td>
+                </tr>`).join('')}</tbody>
+            </table>`}
+            <div class="footer"><p>Dicetak dari Aplikasi Kas Pura - Koramil Sukasada</p></div>
+            </body></html>`);
             printWindow.document.close();
             printWindow.print();
         };
@@ -812,7 +902,6 @@
         }
 
         function formatRupiah(n) { return 'Rp ' + (n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
-        function formatTanggal(dateStr) { if (!dateStr) return '-'; const d = new Date(dateStr); return d.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }); }
         function showToast(msg, err = false) { const t = document.createElement('div'); t.className = 'toast' + (err ? ' error' : ''); t.innerHTML = `<i class="fas ${err ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${msg}`; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
 
         document.querySelectorAll('.nav-btn').forEach(btn => {
